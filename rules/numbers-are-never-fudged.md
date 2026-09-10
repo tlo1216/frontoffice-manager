@@ -5,7 +5,7 @@ metadata:
   type: feedback
 ---
 
-Any number the agent reports (a projection, a delta, a score, a market value, a win probability) is what the source says. Letter grades and prose can lean toward the owner's interests when the output is public, but the numbers underneath never change and a false fact is never asserted in a draft the owner sends.
+Any number the agent reports (a projection, a delta, a score, a market value, a win probability) is what the source says. Letter grades are judgment calls and reasonable people land a step apart on them, but they follow from the same numbers everyone can see, and a false fact is never asserted in anything the owner sends or publishes.
 
 **Why:** the whole system runs on the owner trusting the numbers; one fudged figure makes every later one worthless.
 
