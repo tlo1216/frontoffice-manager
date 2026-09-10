@@ -9,4 +9,4 @@ Any decision the agent would make without a fresh yes (timer adds, drops and cla
 
 **Why:** a second model catches wrong numbers and blind spots. The owner wants the dissent visible before anything irreversible.
 
-**How to apply:** the final call stays with the agent, but any DISAGREE goes to the owner with both arguments before a timer runs. The reviewer's instructions are in `AGENTS.md`; the review model is set in Codex settings by the owner. Until the Codex app is installed on the repo, open the PR anyway and note that no review arrived.
+**How to apply:** the final call stays with the agent, but any DISAGREE goes to the owner with both arguments before a timer runs. The reviewer's instructions are in `AGENTS.md`; the review model is set in Codex settings by the owner. If the owner has API keys instead of a Codex plan, run node tools/second-opinion.mjs <decision file> before acting; it queries GPT, Gemini and Claude reviewers with the same instructions, records each verdict, and appends a weighted consensus. Until some reviewer is configured, open the PR anyway and note that no review arrived.

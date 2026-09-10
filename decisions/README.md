@@ -46,3 +46,7 @@ What has to be true for this to be wrong.
 ## Review
 (filled after the review)
 ```
+
+## Without a Codex plan: API reviewers (GPT, Gemini, Claude)
+
+`tools/second-opinion.mjs` sends the same decision file and the same review instructions to every provider you have an API key for, asks each for a structured AGREE or DISAGREE with disputed numbers and an alternative, and appends a weighted consensus to the decision file. Keys and model ids go in `.env` (see the header of the script); each call is billed per use by the provider, no subscription. Weights default to 1 each and can be tuned per provider. Use it instead of, or in addition to, the Codex GitHub app; the agent runs it right after writing the decision file and before acting. Consensus rules: 60 percent or more agreement by weight and confidence is AGREE, 40 percent or less is DISAGREE, in between is SPLIT; DISAGREE and SPLIT go to the owner before any timer runs.

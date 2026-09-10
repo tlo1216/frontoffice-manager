@@ -1,4 +1,4 @@
-# AGENTS.md (read by Codex when it reviews this repo)
+# AGENTS.md (read by Codex when it reviews this repo, and sent to GPT, Gemini and Claude by tools/second-opinion.mjs)
 
 This repository is the operating record of one fantasy football team managed by a Claude Code agent. Codex is the second opinion. When you are tagged on a pull request that adds or changes a file under `decisions/`, review the decision, not the markdown.
 

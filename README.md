@@ -34,7 +34,7 @@ No server, no bot account, no scraping. Reads go through the same league API the
 | 90 minutes before each kickoff window | Verify starters are active, compare to the bench, fix the lineup, tell you. |
 | Tuesday morning | Week is final. Waiver targets versus your weakest bench spots, proposed claims with drops, next week's reminders. |
 | When you paste a screenshot | Updates its picture of the league from your app or group chat and tells you what changed. |
-| Before any decision it would make alone | Opens a decision PR that a second model reviews. A disagreement reaches you first. |
+| Before any decision it would make alone | Opens a decision PR reviewed by Codex, or by GPT, Gemini and Claude through their APIs, with a weighted consensus. A disagreement reaches you first. |
 
 ## What is in the box
 
@@ -59,7 +59,7 @@ docs/                banner and architecture diagram
 - **Numbers are never fudged.** Grades and prose can have a point of view; projections, deltas and scores are always what the source says.
 - **Two opinions on every trade.** ESPN projections for the median and FantasyCalc market values for what other managers think a player is worth.
 - **Official data, not just the app.** nflverse schedules set the lock reminders; the official injury report and depth charts are checked before every lineup call. See tools/optional-integrations.md for what was evaluated and why.
-- **A second model before autonomous action.** Decisions become pull requests that Codex reviews; the record is the merged file.
+- **Other models before autonomous action.** Decisions become pull requests that Codex reviews, or a script sends them to GPT, Gemini and Claude reviewers through their APIs and records a weighted consensus. A disagreement reaches you before anything happens.
 - **Cost aware.** Hourly polling with a silent exit, the large model for judgment, a smaller one for mechanical edits.
 - **Restart safe.** Reminders live in the session; the repo lets any session on any machine pick up where the last one stopped.
 
