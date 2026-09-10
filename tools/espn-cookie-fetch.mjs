@@ -8,8 +8,8 @@
 //        node tools/diff-snapshot.mjs snapshot.txt --apply   (diff-snapshot accepts a plain snapshot file too)
 import fs from 'node:fs';
 const env = Object.fromEntries(fs.readFileSync('.env', 'utf8').split('\n').filter(l => l.includes('=')).map(l => { const i = l.indexOf('='); return [l.slice(0, i).trim(), l.slice(i + 1).trim()]; }));
-const SEASON = +env.ESPN_SEASON, LEAGUE_ID = env.ESPN_LEAGUE_ID;
-const base = `https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/${SEASON}/segments/0/leagues/${LEAGUE_ID}`;
+const SEASON = +env.ESPN_SEASON, LEAGUE_ID = env.ESPN_LEAGUE_ID, SPORT = env.ESPN_SPORT || 'ffl'; // ffl, fba, flb
+const base = `https://lm-api-reads.fantasy.espn.com/apis/v3/games/${SPORT}/seasons/${SEASON}/segments/0/leagues/${LEAGUE_ID}`;
 const headers = { Cookie: `espn_s2=${env.ESPN_S2}; SWID=${env.SWID}` };
 const j = async (u, extra) => { const r = await fetch(u, { headers: { ...headers, ...(extra || {}) } }); if (r.status !== 200) throw new Error('status ' + r.status + ' (cookies expired?)'); return r.json(); };
 const R = await j(base + '?view=mRoster');

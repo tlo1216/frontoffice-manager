@@ -5,11 +5,12 @@
 <p align="center">
   <a href="START-HERE.md"><img alt="Start here" src="https://img.shields.io/badge/start-one%20message-4ade80?style=for-the-badge"></a>
   <img alt="Platforms" src="https://img.shields.io/badge/platforms-ESPN%20%7C%20Sleeper-22d3ee?style=for-the-badge">
+  <img alt="Sports" src="https://img.shields.io/badge/sports-NFL%20%7C%20NBA%20%7C%20MLB-f59e0b?style=for-the-badge">
   <img alt="Agents" src="https://img.shields.io/badge/agents-Claude%20Code%20%7C%20Codex-a78bfa?style=for-the-badge">
   <img alt="License" src="https://img.shields.io/badge/license-MIT-64748b?style=for-the-badge">
 </p>
 
-**frontoffice-manager** turns a coding agent into a standing manager for your fantasy football team. It reads your league every hour, sets your lineup before every kickoff, grades every trade and pickup in the league with projections and market values, proposes moves with the numbers, and keeps a written record of everything in a private repo. You keep the veto: lineup moves are pre authorized, adds and drops need your yes or a timer you define, and trades are never sent by the agent.
+**frontoffice-manager** turns a coding agent into a standing manager for your fantasy football, basketball or baseball team. It reads your league every hour, sets your lineup before every kickoff, grades every trade and pickup in the league with projections and market values, proposes moves with the numbers, and keeps a written record of everything in a private repo. You keep the veto: lineup moves are pre authorized, adds and drops need your yes or a timer you define, and trades are never sent by the agent.
 
 It is the sanitized version of a setup that has run a real eight team ESPN league since the 2026 draft.
 
@@ -49,8 +50,9 @@ league/              templates the agent keeps current: roster, managers, settin
                      standing authorizations
 rules/               one file per standing rule, in the agent's own memory format; edit to change behavior
 decisions/           the cross review protocol and template
-tools/               ESPN and Sleeper API cheat sheets, snapshot scripts (browser pane and cookie based),
-                     the hourly diff, the decision PR script
+tools/               ESPN (football, basketball, baseball) and Sleeper cheat sheets, free NFL,
+                     NBA and MLB data sources, snapshot scripts, the diff, the decision PR script,
+                     the multi model reviewer
 docs/                banner and architecture diagram
 ```
 
@@ -63,6 +65,10 @@ docs/                banner and architecture diagram
 - **Other models before autonomous action.** Decisions become pull requests that Codex reviews, or a script sends them to GPT, Gemini and Claude reviewers through their APIs and records a weighted consensus. A disagreement reaches you before anything happens.
 - **Cost aware.** Hourly polling with a silent exit, the large model for judgment, a smaller one for mechanical edits.
 - **Restart safe.** Reminders live in the session; the repo lets any session on any machine pick up where the last one stopped.
+
+## Basketball and baseball
+
+Daily sports change the rhythm, not the rules. The agent runs a lineup pass every morning and again before the first tip or pitch, benches players without a game, streams within your league's add limits, handles the IL from the official feeds (MLB transactions, the NBA injury report), and does category math when the league is not points based. Cheat sheets for the ESPN basketball and baseball APIs and for free NBA and MLB data are in `tools/`; the rule is `rules/daily-sports.md`. These paths were adapted from a running football league and are marked as not yet exercised on a live basketball or baseball league; the agent reports every assumption it makes in the first week.
 
 ## Honest limits
 

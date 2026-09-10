@@ -3,8 +3,8 @@
 // Output format: teamId|playerId|name|injury|seasonProj ; FA rows add |pctOwned
 // plus SETTINGS and WAIVERORDER lines, wrapped so the tool saves it to a file.
 // Then: node tools/diff-snapshot.mjs <saved file> --apply
-const SEASON = 2026, LEAGUE_ID = 'YOUR_LEAGUE_ID';
-const base = 'https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/' + SEASON + '/segments/0/leagues/' + LEAGUE_ID;
+const SEASON = 2026, LEAGUE_ID = 'YOUR_LEAGUE_ID', SPORT = 'ffl'; // ffl football, fba basketball, flb baseball
+const base = 'https://lm-api-reads.fantasy.espn.com/apis/v3/games/' + SPORT + '/seasons/' + SEASON + '/segments/0/leagues/' + LEAGUE_ID;
 const j = async (u, h) => { const r = await fetch(u, { credentials: 'include', headers: h || {} }); if (r.status !== 200) throw new Error('status ' + r.status + ' pageHasRoster=' + /[A-Z][a-z]+ [A-Z][a-z]+/.test(document.body.innerText)); return r.json(); };
 const R = await j(base + '?view=mRoster');
 const M = await j(base + '?view=mTeam');
