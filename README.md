@@ -45,6 +45,7 @@ START-HERE.md        the one message that sets everything up, for Claude Code or
 SETUP.md             the machine: staying awake, tools, the ESPN login, restarts
 KEYS.md              optional: your own API keys for GPT, Gemini and Claude as reviewers
 DRAFT.md             draft day: the value board, autodraft through your pre ranked list, live assistant
+ESPN-MCP.md          ESPN without the browser: a local MCP server for reads and validated writes
 YAHOO-SETUP.md       Yahoo leagues: the five minute sign in
 CLAUDE.md            instructions the agent reads in your private repo
 AGENTS.md            instructions Codex follows when it reviews decisions
@@ -67,7 +68,12 @@ docs/                banner and architecture diagram
 - **Official data, not just the app.** nflverse schedules set the lock reminders; the official injury report and depth charts are checked before every lineup call. See tools/optional-integrations.md for what was evaluated and why.
 - **Other models before autonomous action.** Decisions become pull requests that Codex reviews, or a script sends them to GPT, Gemini and Claude reviewers through their APIs and records a weighted consensus. A disagreement reaches you before anything happens.
 - **Cost aware, and your call.** Hourly polling with a silent exit, the large model for judgment, a smaller one for mechanical edits. Every model is a setting you choose: stronger models grade better and cost more, and KEYS.md says which jobs tolerate a cheaper one.
+- **Two ESPN interfaces.** The browser pane needs nothing installed; the MCP server needs ten minutes and removes the pane from the loop. Either way the same rules and authorizations apply.
 - **Restart safe.** Reminders live in the session; the repo lets any session on any machine pick up where the last one stopped.
+
+## ESPN without the browser
+
+The default ESPN path is the agent's browser pane. The better one is a small local MCP server that reads and writes ESPN with your own session cookies: reads, a snapshot in the hourly diff's format, a lineup suggestion, and writes that validate eligibility, locks and roster limits in a dry run before anything is sent. No trade tools. Get it by cloning if you have access, or build it in twenty minutes by pasting  into an agent. See ESPN-MCP.md.
 
 ## Draft day
 
