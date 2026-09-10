@@ -20,3 +20,18 @@ Things people ask about, with an honest verdict for this kit. Baked in means it 
 | nbainjuries (Python) | optional | Parses the official NBA injury report PDFs; only needed for the exact official wording. |
 | Hashtag Basketball, Basketball Monster, FanGraphs | skip for automation | Excellent rankings and projections for the owner to read; no stable API for the agent. |
 | FantasyPros, Fantasy Life, Fantasy Points, Establish the Run | skip for automation | Paid content with no stable API. Good reading for the owner; the agent cannot consume them reliably. |
+
+## Sources and further reading
+
+- ESPN v3 fantasy API notes: https://stmorse.github.io/journal/espn-fantasy-v3.html and the ffscrapr endpoint guide: https://ffscrapr.ffverse.com/articles/espn_getendpoint.html
+- ESPN league and player JSON views: https://thomaswildetech.com/projects/espn/league-info-json-views/ and https://thomaswildetech.com/projects/espn/player-info-json-views/
+- espn-api (Python, football and basketball, baseball in development): https://github.com/cwendt94/espn-api
+- ESPN fantasy basketball MCP server: https://lobehub.com/mcp/dylancharris-espn-fantasy-basketball-mcp
+- Sleeper API guide: https://zuplo.com/learning-center/sleeper-api and Sleeper fantasy basketball: https://support.sleeper.com/en/articles/4701979-intro-to-sleeper-fantasy-basketball
+- sleeper-api-wrapper (Python): https://github.com/SwapnikKatkoori/sleeper-api-wrapper and sleeper-api-mcp: https://github.com/anthonybaldwin/sleeper-api-mcp
+- Yahoo Fantasy Sports API: https://developer.yahoo.com/fantasysports/guide/ with yfpy: https://github.com/uberfastman/yfpy, yahoofantasy: https://github.com/mattdodge/yahoofantasy, yahoo_fantasy_api: https://pypi.org/project/yahoo-fantasy-api/
+- MLB Stats API overview: https://grokipedia.com/page/MLB_Stats_API and MLB-StatsAPI (Python): https://github.com/toddrob99/MLB-StatsAPI
+- NBA official injury report: https://official.nba.com/nba-injury-report-2020-21-season and nbainjuries (Python): https://github.com/mxufc29/nbainjuries
+- nflverse data releases: https://github.com/nflverse/nflverse-data/releases, nfl_data_py: https://github.com/nflverse/nfl_data_py, nflreadpy: https://github.com/nflverse/nflreadpy
+- FantasyCalc values: https://www.fantasycalc.com/
+- Memory and graph tools evaluated: claude-mem https://github.com/thedotmack/claude-mem, Graphify https://github.com/Graphify-Labs/graphify, Agent-Reach https://github.com/Panniantong/Agent-Reach
