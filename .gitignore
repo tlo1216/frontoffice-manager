@@ -1,5 +1,18 @@
+# Secrets. Never commit any of these.
 .env
+.env.*
+*.env
+!.env.example
+
+# Anything the agent writes that can contain identifiers or request bodies
+logs/
+captured/*.json
+rosters.json
+draft-board.json
+*snapshot*.txt
+*.local.json
+
+# Caches
 node_modules/
 tools/sleeper-players.json
-tools/league-snapshot.txt
 tools/*.csv

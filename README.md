@@ -44,6 +44,8 @@ No server, no bot account, no scraping. Reads go through the same league API the
 ```
 START-HERE.md        the one message that sets everything up, for Claude Code or Codex
 SETUP.md             the machine: staying awake, tools, the ESPN login, restarts
+SECURITY.md          every risk, including the inconvenient ones. Read before you add credentials
+FEEDBACK.md          how to tell me what broke, or what worked
 AUTONOMY.md          how much it does for you (levels 0 to 4) and which models it uses
 TIPS.md              how to actually run it: always on machine, phone remote, widening its authority
 KEYS.md              optional: your own API keys for GPT, Gemini and Claude as reviewers
@@ -92,12 +94,20 @@ Yahoo has the only official fantasy API, with reads and writes for football, bas
 
 Daily sports change the rhythm, not the rules. The agent runs a lineup pass every morning and again before the first tip or pitch, benches players without a game, streams within your league's add limits, handles the IL from the official feeds (MLB transactions, the NBA injury report), and does category math when the league is not points based. Cheat sheets for the ESPN basketball and baseball APIs and for free NBA and MLB data are in `tools/`; the rule is `rules/daily-sports.md`. These paths were adapted from a running football league and are marked as not yet exercised on a live basketball or baseball league; the agent reports every assumption it makes in the first week.
 
+## Risks
+
+This hands an agent your fantasy credentials and, if you let it, the ability to change your roster while you sleep. [SECURITY.md](SECURITY.md) lists every risk plainly: ESPN cookies are full account access and sit in a text file, automating ESPN is a gray area in its terms, roster moves have no undo, your league mates can try to steer the agent through anything it reads, and the private repo holds candid notes about real people. Read it before you paste a cookie.
+
 ## Honest limits
 
 - The ESPN login lasts about a month, then you log in again. Sleeper reads need no login at all. Yahoo needs a developer app and one pasted code, then refreshes itself.
 - Without a browser pane (Codex, a terminal only agent) the agent proposes writes and you tap confirm. Everything else is identical.
 - Projections are the platform's. The agent adds judgment, news and market data, not a better model.
 - It will tell you when your idea is bad. That is the point.
+
+## Feedback
+
+Tell your agent "file feedback about X" and it drafts the issue, strips anything secret, shows it to you and posts it only if you say yes. Or open one yourself: [something broke](https://github.com/tlo1216/frontoffice-manager/issues/new?template=bug.md), [an idea](https://github.com/tlo1216/frontoffice-manager/issues/new?template=idea.md), [it worked](https://github.com/tlo1216/frontoffice-manager/issues/new?template=story.md), or [ask a question](https://github.com/tlo1216/frontoffice-manager/discussions). Details and the never-paste-this list are in [FEEDBACK.md](FEEDBACK.md).
 
 ## License
 
