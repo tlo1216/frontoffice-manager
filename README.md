@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/banner.svg" alt="frontoffice-manager" width="100%">
+  <img src="docs/social-preview.png" alt="frontoffice-manager" width="100%">
 </p>
 
 <p align="center">
