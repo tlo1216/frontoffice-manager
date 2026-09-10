@@ -58,6 +58,7 @@ docs/                banner and architecture diagram
 - **Written authorizations, not vibes.** What the agent may do alone lives in one file you edit. The default is lineup moves only.
 - **Numbers are never fudged.** Grades and prose can have a point of view; projections, deltas and scores are always what the source says.
 - **Two opinions on every trade.** ESPN projections for the median and FantasyCalc market values for what other managers think a player is worth.
+- **Official data, not just the app.** nflverse schedules set the lock reminders; the official injury report and depth charts are checked before every lineup call. See tools/optional-integrations.md for what was evaluated and why.
 - **A second model before autonomous action.** Decisions become pull requests that Codex reviews; the record is the merged file.
 - **Cost aware.** Hourly polling with a silent exit, the large model for judgment, a smaller one for mechanical edits.
 - **Restart safe.** Reminders live in the session; the repo lets any session on any machine pick up where the last one stopped.
