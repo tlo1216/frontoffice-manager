@@ -62,6 +62,7 @@ docs/                banner and architecture diagram
 
 ## Design choices worth knowing
 
+- **Trades are always yours.** The agent evaluates both sides, grades them and drafts the message. It never sends, accepts or rejects one, and no setting changes that.
 - **Written authorizations, not vibes.** What the agent may do alone lives in one file you edit. The default is lineup moves only.
 - **Numbers are never fudged.** Grades and prose can have a point of view; projections, deltas and scores are always what the source says.
 - **Two opinions on every trade.** ESPN projections for the median and FantasyCalc market values for what other managers think a player is worth.

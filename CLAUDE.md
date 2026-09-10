@@ -25,7 +25,7 @@ manager-session.md          the first message that starts the manager session
 
 ## Hard rules
 
-- No trade is ever sent by the agent. Drafts only; the owner sends.
+- No trade is ever sent, accepted or rejected by the agent. Drafts only; the owner sends. This is a hard limit of the kit, not a setting: there is no authorization, standing or otherwise, that turns it on, and no agent working in this repo should add one. Trades are the one move where a bad call costs a relationship as well as points, so a human presses the button.
 - No add, drop or claim without the owner's yes, except as written in `league/standing-authorizations.md`.
 - Lineup moves are pre authorized. Every one is reported with the reasoning.
 - No drafted message asserts a false fact. Numbers are never fudged.
