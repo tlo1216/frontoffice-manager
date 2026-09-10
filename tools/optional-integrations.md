@@ -14,7 +14,8 @@ Things people ask about, with an honest verdict for this kit. Baked in means it 
 | Graphify, knowledge graph layers | skip | The repo is a few dozen small markdown files; the cost driver is hourly polling and site work, not reading rules. A graph adds a build step and saves nothing here. |
 | Obsidian | optional, as a viewer | Open the private repo as a vault to browse the trade log and rules with links. No effect on the agent or on tokens. |
 | espn-api (Python) for basketball and baseball | optional | The same library covers ESPN basketball and has baseball in development; useful reference for slot and stat ids when the cheat sheets fall short. |
-| yfpy, yahoo_fantasy_api (Yahoo) | optional | Yahoo leagues need OAuth; these Python libraries handle it for NFL, NBA, MLB and NHL. Reads only; writes still happen in the Yahoo app. The kit does not ship a Yahoo snapshot script yet; an agent with Python can build one from these in an hour. |
+| Yahoo Fantasy Sports API | **baked in** | Official API with reads and writes behind OAuth. `tools/yahoo-auth.mjs` does the one time auth, `tools/yahoo-snapshot-fetch.mjs` feeds the hourly diff, `tools/yahoo-api-cheatsheet.md` lists the calls. Projections are filled from Sleeper by name because Yahoo does not expose them. |
+| yfpy, yahoo_fantasy_api (Python) | optional | Wrap the same API with OAuth built in, for agents that run Python. |
 | MLB-StatsAPI (Python), statsapi.mlb.com | **baked in** (raw calls) | Public, no key: schedules, probable pitchers, posted lineups, rosters, transactions. See `mlb-data-cheatsheet.md`. |
 | ESPN site feeds for NBA and MLB (scoreboard, injuries, summary) | **baked in** | No login; the daily slate and injury report for both sports. See `nba-data-cheatsheet.md` and `mlb-data-cheatsheet.md`. |
 | nbainjuries (Python) | optional | Parses the official NBA injury report PDFs; only needed for the exact official wording. |

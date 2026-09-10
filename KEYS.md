@@ -25,6 +25,10 @@ A key is a long password that lets a program call a model directly, billed per u
 1. console.anthropic.com, API keys, create one, add a small balance.
 2. Model id from the same listing.
 
+## Yahoo (only if your league is on Yahoo)
+
+Not a model key, but it lives in the same file. Create an app at https://developer.yahoo.com/apps/create/ (Installed Application, redirect `https://localhost:8080`, Fantasy Sports permission, Read/Write if you want the agent to set lineups through the API). Put the Client ID and Client Secret in `.env` as `YAHOO_CLIENT_ID` and `YAHOO_CLIENT_SECRET`, then run `node tools/yahoo-auth.mjs` and paste the code it asks for. It stores the refresh token and prints your league keys; put yours in `.env` as `YAHOO_LEAGUE_KEY`, plus `YAHOO_SPORT` (nfl, nba, mlb) and `YAHOO_SEASON`.
+
 ## Where the keys go
 
 Create a file named exactly `.env` in your private repo folder (in Notepad choose "All files" as the type so it is not saved as `.env.txt`). One line each:
@@ -41,3 +45,7 @@ GEMINI_MODEL=<model id>
 ## Then
 
 Tell the agent the keys are in. It runs `node tools/list-models.mjs` to confirm both work and set the model ids, then every autonomous decision goes through `tools/second-opinion.mjs` and the weighted consensus lands in the decision file. Details in `decisions/README.md`.
+
+## Choosing models
+
+Every model choice is yours. The agent itself runs on whatever model you pick in Claude Code or Codex; the reviewers run on the ids you put in `.env`. Stronger reasoning models give better grades and catch more mistakes, and they cost more per call and per session. Cheaper models are fine for placement and mechanical edits and are not fine for grades, decisions or any sentence that leans on a number. A sensible default: the strongest model you have for the standing manager session, the strongest reasoning model on each provider for the reviewers, and a small model for subagents doing layout. If cost matters more than the last few percent of judgment, lower the reviewer models first, then widen the hourly watch to every two hours, and keep the manager session on the big model. The kit never picks a model for you; `node tools/list-models.mjs` shows what your keys can reach so you can decide.

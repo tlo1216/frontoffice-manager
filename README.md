@@ -66,13 +66,17 @@ docs/                banner and architecture diagram
 - **Cost aware, and your call.** Hourly polling with a silent exit, the large model for judgment, a smaller one for mechanical edits. Every model is a setting you choose: stronger models grade better and cost more, and KEYS.md says which jobs tolerate a cheaper one.
 - **Restart safe.** Reminders live in the session; the repo lets any session on any machine pick up where the last one stopped.
 
+## Yahoo
+
+Yahoo has the only official fantasy API, with reads and writes for football, basketball, baseball and hockey behind OAuth. The kit ships the one time auth script (`tools/yahoo-auth.mjs`, you paste one code), a snapshot script that feeds the same hourly diff, and a cheat sheet with every endpoint the agent uses. Yahoo does not publish projections through the API, so the snapshot fills them from Sleeper's projections by name and says so when it cannot.
+
 ## Basketball and baseball
 
 Daily sports change the rhythm, not the rules. The agent runs a lineup pass every morning and again before the first tip or pitch, benches players without a game, streams within your league's add limits, handles the IL from the official feeds (MLB transactions, the NBA injury report), and does category math when the league is not points based. Cheat sheets for the ESPN basketball and baseball APIs and for free NBA and MLB data are in `tools/`; the rule is `rules/daily-sports.md`. These paths were adapted from a running football league and are marked as not yet exercised on a live basketball or baseball league; the agent reports every assumption it makes in the first week.
 
 ## Honest limits
 
-- The ESPN login lasts about a month, then you log in again. Sleeper reads need no login at all.
+- The ESPN login lasts about a month, then you log in again. Sleeper reads need no login at all. Yahoo needs a developer app and one pasted code, then refreshes itself.
 - Without a browser pane (Codex, a terminal only agent) the agent proposes writes and you tap confirm. Everything else is identical.
 - Projections are the platform's. The agent adds judgment, news and market data, not a better model.
 - It will tell you when your idea is bad. That is the point.
