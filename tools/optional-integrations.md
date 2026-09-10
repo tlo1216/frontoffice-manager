@@ -13,6 +13,7 @@ Things people ask about, with an honest verdict for this kit. Baked in means it 
 | claude-mem, other memory plugins | skip | This kit already keeps memory as files in the repo (`rules/`, `league/`), which any agent on any machine can read. A second memory system means two sources of truth. |
 | Graphify, knowledge graph layers | skip | The repo is a few dozen small markdown files; the cost driver is hourly polling and site work, not reading rules. A graph adds a build step and saves nothing here. |
 | Obsidian | optional, as a viewer | Open the private repo as a vault to browse the trade log and rules with links. No effect on the agent or on tokens. |
+| espn-fantasy-mcp (https://github.com/tlo1216/espn-fantasy-mcp) | **baked in** | Open source local MCP server for ESPN reads and validated writes with your own cookies; replaces the browser pane. See ESPN-MCP.md. |
 | espn-api (Python) for basketball and baseball | optional | The same library covers ESPN basketball and has baseball in development; useful reference for slot and stat ids when the cheat sheets fall short. |
 | Yahoo Fantasy Sports API | **baked in** | Official API with reads and writes behind OAuth. `tools/yahoo-auth.mjs` does the one time auth, `tools/yahoo-snapshot-fetch.mjs` feeds the hourly diff, `tools/yahoo-api-cheatsheet.md` lists the calls. Projections are filled from Sleeper by name because Yahoo does not expose them. |
 | yfpy, yahoo_fantasy_api (Python) | optional | Wrap the same API with OAuth built in, for agents that run Python. |

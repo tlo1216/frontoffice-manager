@@ -73,7 +73,7 @@ docs/                banner and architecture diagram
 
 ## ESPN without the browser
 
-The default ESPN path is the agent's browser pane. The better one is a small local MCP server that reads and writes ESPN with your own session cookies: reads, a snapshot in the hourly diff's format, a lineup suggestion, and writes that validate eligibility, locks and roster limits in a dry run before anything is sent. No trade tools. Get it by cloning if you have access, or build it in twenty minutes by pasting  into an agent. See ESPN-MCP.md.
+The default ESPN path is the agent's browser pane. The better one is a small local MCP server that reads and writes ESPN with your own session cookies: reads, a snapshot in the hourly diff's format, a lineup suggestion, and writes that validate eligibility, locks and roster limits in a dry run before anything is sent. No trade tools. Open source at https://github.com/tlo1216/espn-fantasy-mcp: clone, npm install, npm run build, add your cookies, register it. See ESPN-MCP.md.
 
 ## Draft day
 

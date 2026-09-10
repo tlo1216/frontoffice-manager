@@ -8,10 +8,16 @@ Tools it can call directly: `get_league`, `get_teams`, `get_rosters`, `get_free_
 
 ## Get it
 
-Two ways, pick one:
+It is open source: https://github.com/tlo1216/espn-fantasy-mcp
 
-1. **Clone it**, if you were given access to the repository: `git clone <repo url> espn-fantasy-mcp`, then `npm install` and `npm run build` inside it. Its README has the cookie steps.
-2. **Build it yourself in twenty minutes** with an agent: open Claude Code or Codex in an empty folder and paste `docs/espn-mcp-build-prompt.md`. It contains everything needed, including the captured write payloads that no public source documents. The result is the same server.
+```bash
+git clone https://github.com/tlo1216/espn-fantasy-mcp.git
+cd espn-fantasy-mcp
+npm install
+npm run build
+```
+
+Its README has the cookie steps and the tool reference. If you would rather build your own, `docs/espn-mcp-build-prompt.md` is the prompt that produced it.
 
 ## Connect it (once)
 
