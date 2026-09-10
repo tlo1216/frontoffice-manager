@@ -9,7 +9,7 @@ This kit hands an AI agent your fantasy account credentials and, if you let it, 
 They live in a plain text file on your computer. That means:
 
 - Anyone with access to your machine, or to a backup of it, has them.
-- If your repo folder sits in OneDrive, Dropbox or iCloud, they are in that cloud account too. Mine does. Keep the file outside a synced folder if you can, or accept the tradeoff knowingly.
+- If your repo folder sits in OneDrive, Dropbox or iCloud, they are in that cloud account too, and they stay in that provider version history even after you move the folder out. Mine used to; I moved it to a plain local folder once I noticed. Do the same, and if the cookies were ever synced, log out of ESPN everywhere afterwards so the synced copies are dead.
 - If you ever paste them into a chat, an issue, or a screenshot, treat them as burned and log out of ESPN everywhere immediately.
 
 Sleeper needs no credentials for reads. Yahoo uses OAuth, which is better: the token is scoped to fantasy and you can revoke it from your Yahoo account page without changing your password. If security is your main concern, Yahoo is the safest platform of the three and ESPN the least.
