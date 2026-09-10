@@ -5,9 +5,9 @@ Yahoo is the one platform with an official, documented API, and it covers reads 
 ## Setup (once, about ten minutes)
 
 1. Go to https://developer.yahoo.com/apps/create/ signed into the Yahoo account that owns your fantasy team.
-2. Application name: anything ("frontoffice"). Application type: Installed Application. Redirect URI: `https://localhost:8080` (nothing runs there; the code appears in the address bar). API permissions: check Fantasy Sports and choose Read/Write if you want the agent to make lineup moves through the API, Read if you only want reads.
+2. Application name: anything ("frontoffice"). Application type: Installed Application. Redirect URI: `oob` (Yahoo then shows the code on screen). API permissions: check Fantasy Sports and choose Read/Write if you want the agent to make lineup moves through the API, Read if you only want reads. The plain language version is YAHOO-SETUP.md.
 3. Copy the Client ID and Client Secret into `.env` as `YAHOO_CLIENT_ID` and `YAHOO_CLIENT_SECRET`.
-4. Run `node tools/yahoo-auth.mjs`. It prints a URL; open it, click Allow, copy the code from the page or the address bar (`code=...`), paste it back. The script stores `YAHOO_REFRESH_TOKEN` in `.env` and prints your leagues with their keys. Access tokens last an hour; the scripts refresh them automatically from the refresh token, which lasts until you revoke it.
+4. Run `node tools/yahoo-auth.mjs`. It prints a URL; open it, click Allow, copy the code from the page or the address bar (`code=...`), paste it back. The script stores `YAHOO_REFRESH_TOKEN` in `.env`, prints your leagues, and writes `YAHOO_LEAGUE_KEY`, `YAHOO_TEAM_KEY`, `YAHOO_SPORT` and `YAHOO_SEASON` itself when you are in one active league. Access tokens last an hour; the scripts refresh them automatically from the refresh token, which lasts until you revoke it.
 
 ## Keys
 

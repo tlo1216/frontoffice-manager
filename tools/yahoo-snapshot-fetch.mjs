@@ -10,7 +10,7 @@ import fs from 'node:fs';
 const envPath = process.env.FRONTOFFICE_ENV || '.env';
 const env = Object.fromEntries(fs.readFileSync(envPath, 'utf8').split('\n').filter(l => l.includes('=')).map(l => { const i = l.indexOf('='); return [l.slice(0, i).trim(), l.slice(i + 1).trim()]; }));
 const basic = Buffer.from(env.YAHOO_CLIENT_ID + ':' + env.YAHOO_CLIENT_SECRET).toString('base64');
-const tok = await (await fetch('https://api.login.yahoo.com/oauth2/get_token', { method: 'POST', headers: { Authorization: 'Basic ' + basic, 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ grant_type: 'refresh_token', refresh_token: env.YAHOO_REFRESH_TOKEN, redirect_uri: env.YAHOO_REDIRECT || 'https://localhost:8080' }) })).json();
+const tok = await (await fetch('https://api.login.yahoo.com/oauth2/get_token', { method: 'POST', headers: { Authorization: 'Basic ' + basic, 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ grant_type: 'refresh_token', refresh_token: env.YAHOO_REFRESH_TOKEN, redirect_uri: 'oob' }) })).json();
 if (!tok.access_token) { console.error('Yahoo token refresh failed; rerun tools/yahoo-auth.mjs'); process.exit(1); }
 const base = 'https://fantasysports.yahooapis.com/fantasy/v2';
 const j = async (path) => { const r = await fetch(base + path + (path.includes('?') ? '&' : '?') + 'format=json', { headers: { Authorization: 'Bearer ' + tok.access_token } }); if (r.status !== 200) throw new Error('yahoo ' + r.status + ' on ' + path); return r.json(); };

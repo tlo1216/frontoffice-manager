@@ -43,6 +43,7 @@ No server, no bot account, no scraping. Reads go through the same league API the
 START-HERE.md        the one message that sets everything up, for Claude Code or Codex
 SETUP.md             the machine: staying awake, tools, the ESPN login, restarts
 KEYS.md              optional: your own API keys for GPT, Gemini and Claude as reviewers
+YAHOO-SETUP.md       Yahoo leagues: the five minute sign in
 CLAUDE.md            instructions the agent reads in your private repo
 AGENTS.md            instructions Codex follows when it reviews decisions
 manager-session.md   the full standing manager prompt, if you prefer to paste it yourself
@@ -68,7 +69,7 @@ docs/                banner and architecture diagram
 
 ## Yahoo
 
-Yahoo has the only official fantasy API, with reads and writes for football, basketball, baseball and hockey behind OAuth. The kit ships the one time auth script (`tools/yahoo-auth.mjs`, you paste one code), a snapshot script that feeds the same hourly diff, and a cheat sheet with every endpoint the agent uses. Yahoo does not publish projections through the API, so the snapshot fills them from Sleeper's projections by name and says so when it cannot.
+Yahoo has the only official fantasy API, with reads and writes for football, basketball, baseball and hockey behind OAuth. The kit ships a five minute setup (`YAHOO-SETUP.md`: make the app, paste two values, run one script, paste one code; the script finds your league and team by itself), a snapshot script that feeds the same hourly diff, and a cheat sheet with every endpoint the agent uses. Yahoo does not publish projections through the API, so the snapshot fills them from Sleeper's projections by name and says so when it cannot.
 
 ## Basketball and baseball
 

@@ -27,7 +27,7 @@ A key is a long password that lets a program call a model directly, billed per u
 
 ## Yahoo (only if your league is on Yahoo)
 
-Not a model key, but it lives in the same file. Create an app at https://developer.yahoo.com/apps/create/ (Installed Application, redirect `https://localhost:8080`, Fantasy Sports permission, Read/Write if you want the agent to set lineups through the API). Put the Client ID and Client Secret in `.env` as `YAHOO_CLIENT_ID` and `YAHOO_CLIENT_SECRET`, then run `node tools/yahoo-auth.mjs` and paste the code it asks for. It stores the refresh token and prints your league keys; put yours in `.env` as `YAHOO_LEAGUE_KEY`, plus `YAHOO_SPORT` (nfl, nba, mlb) and `YAHOO_SEASON`.
+Not a model key, but it lives in the same file. Follow YAHOO-SETUP.md: make the Yahoo app (redirect `oob`, Fantasy Sports Read/Write), put the Client ID and Secret in `.env`, run `node tools/yahoo-auth.mjs`, paste one code. The script saves the login and writes the league, team, sport and season keys itself.
 
 ## Where the keys go
 
