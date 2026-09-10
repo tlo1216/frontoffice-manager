@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="START-HERE.md"><img alt="Start here" src="https://img.shields.io/badge/start-one%20message-4ade80?style=for-the-badge"></a>
-  <img alt="Platforms" src="https://img.shields.io/badge/platforms-ESPN%20%7C%20Sleeper-22d3ee?style=for-the-badge">
+  <img alt="Platforms" src="https://img.shields.io/badge/platforms-ESPN%20%7C%20Sleeper%20%7C%20Yahoo-22d3ee?style=for-the-badge">
   <img alt="Sports" src="https://img.shields.io/badge/sports-NFL%20%7C%20NBA%20%7C%20MLB-f59e0b?style=for-the-badge">
   <img alt="Agents" src="https://img.shields.io/badge/agents-Claude%20Code%20%7C%20Codex-a78bfa?style=for-the-badge">
   <img alt="License" src="https://img.shields.io/badge/license-MIT-64748b?style=for-the-badge">
@@ -63,7 +63,7 @@ docs/                banner and architecture diagram
 - **Two opinions on every trade.** ESPN projections for the median and FantasyCalc market values for what other managers think a player is worth.
 - **Official data, not just the app.** nflverse schedules set the lock reminders; the official injury report and depth charts are checked before every lineup call. See tools/optional-integrations.md for what was evaluated and why.
 - **Other models before autonomous action.** Decisions become pull requests that Codex reviews, or a script sends them to GPT, Gemini and Claude reviewers through their APIs and records a weighted consensus. A disagreement reaches you before anything happens.
-- **Cost aware.** Hourly polling with a silent exit, the large model for judgment, a smaller one for mechanical edits.
+- **Cost aware, and your call.** Hourly polling with a silent exit, the large model for judgment, a smaller one for mechanical edits. Every model is a setting you choose: stronger models grade better and cost more, and KEYS.md says which jobs tolerate a cheaper one.
 - **Restart safe.** Reminders live in the session; the repo lets any session on any machine pick up where the last one stopped.
 
 ## Basketball and baseball
