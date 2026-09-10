@@ -44,6 +44,7 @@ No server, no bot account, no scraping. Reads go through the same league API the
 ```
 START-HERE.md        the one message that sets everything up, for Claude Code or Codex
 SETUP.md             the machine: staying awake, tools, the ESPN login, restarts
+AUTONOMY.md          how much it does for you (levels 0 to 4) and which models it uses
 TIPS.md              how to actually run it: always on machine, phone remote, widening its authority
 KEYS.md              optional: your own API keys for GPT, Gemini and Claude as reviewers
 DRAFT.md             draft day: the value board, autodraft through your pre ranked list, live assistant
@@ -65,6 +66,7 @@ docs/                banner and architecture diagram
 ## Design choices worth knowing
 
 - **Trades are always yours.** The agent evaluates both sides, grades them and drafts the message. It never sends, accepts or rejects one, and no setting changes that.
+- **You pick how much it does.** Five levels, from answering questions to running the roster on its own, and three model tiers from best to economy. Asked at setup, changeable in a sentence. See AUTONOMY.md.
 - **Written authorizations, not vibes.** What the agent may do alone lives in one file you edit. The default is lineup moves only.
 - **Numbers are never fudged.** Grades and prose can have a point of view; projections, deltas and scores are always what the source says.
 - **Two opinions on every trade.** ESPN projections for the median and FantasyCalc market values for what other managers think a player is worth.

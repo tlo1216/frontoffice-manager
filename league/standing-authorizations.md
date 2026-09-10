@@ -2,6 +2,10 @@
 
 What the agent may do without a fresh yes, with the date granted and the limits. The default is nothing but lineup moves. Append, do not rewrite.
 
+## YYYY-MM-DD: autonomy level and model tier
+
+Level: (0 ask me anything, 1 reminders, 2 lineup manager, 3 full manager, 4 autopilot). Model tier: (best, balanced, economy). Second opinion reviewers: (on, off). Trades are excluded at every level.
+
 ## YYYY-MM-DD: lineup moves
 
 Standing authorization to set the lineup at any time. Report every move with the reasoning.

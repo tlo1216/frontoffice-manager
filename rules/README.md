@@ -13,6 +13,7 @@ One file per standing rule, in the format the agent keeps in its own memory: wha
 - `model-tiering.md`: which model does what, to control cost
 - `numbers-are-never-fudged.md`: honesty rules for grades, drafts and any public output
 - `espn-mcp.md`: the espn-fantasy-mcp server is the primary ESPN interface when present; dry run every write; pane is the fallback
+- `autonomy-levels.md`: the owner picks level 0 to 4 and a model tier at setup; what each authorizes
 - `weekly-trade-scan.md`: once a week, search the league for trades, score both sides, hand over ranked suggestions
 - `draft.md`: the value board, autodraft through the pre ranked list, the live draft assistant
 - `daily-sports.md`: basketball and baseball: daily lineup passes, streaming, IL feeds, category math
