@@ -41,6 +41,7 @@ No server, no bot account, no scraping. Reads go through the same league API the
 ```
 START-HERE.md        the one message that sets everything up, for Claude Code or Codex
 SETUP.md             the machine: staying awake, tools, the ESPN login, restarts
+KEYS.md              optional: your own API keys for GPT, Gemini and Claude as reviewers
 CLAUDE.md            instructions the agent reads in your private repo
 AGENTS.md            instructions Codex follows when it reviews decisions
 manager-session.md   the full standing manager prompt, if you prefer to paste it yourself

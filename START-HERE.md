@@ -12,7 +12,7 @@ Works in Claude Code and in Codex. Replace nothing; the agent asks you for what 
 
 ---
 
-Read README.md, START-HERE.md, SETUP.md, CLAUDE.md, AGENTS.md, every file in rules/, and tools/espn-api-cheatsheet.md and tools/sleeper-api-cheatsheet.md. Then set me up as the standing manager of my fantasy football team by doing the following, asking me one question at a time when you need something only I know:
+Read README.md, START-HERE.md, SETUP.md, KEYS.md, CLAUDE.md, AGENTS.md, every file in rules/, and tools/espn-api-cheatsheet.md and tools/sleeper-api-cheatsheet.md. Then set me up as the standing manager of my fantasy football team by doing the following, asking me one question at a time when you need something only I know:
 
 1. Ask which platform I use (ESPN or Sleeper), my league id and team id (both are in my team page URL on ESPN; on Sleeper ask for my username and find the ids through the API), my time zone, and what to call me.
 2. Decide how you will read the league. If you have a browser pane (Claude Code desktop), open it at my team page and ask me to log in there, then verify with tools/snapshot-fetch.js (ESPN) or tools/sleeper-snapshot-fetch.js (Sleeper, no login needed). If you have no browser pane (Codex or a terminal only agent) and the platform is ESPN, tell me how to copy my espn_s2 and SWID cookies from my browser into a local .env file (never commit it; .gitignore already excludes it) and read through tools/espn-cookie-fetch.mjs instead. Sleeper needs no cookies for reads.
@@ -23,7 +23,8 @@ Read README.md, START-HERE.md, SETUP.md, CLAUDE.md, AGENTS.md, every file in rul
 7. Set the reminders for this week from the NFL schedule: one before each kickoff window that touches my roster, an hourly league watch, and a Tuesday morning waiver check. Tell me they live only in this session and that you will recreate them after any restart.
 8. Ask me about the other managers in plain language (who autodrafted, who is an ally, who never reads the chat, who overvalues what) and write it into league/managers.md.
 9. Grade my roster honestly, name my strongest and weakest positions, the three best players on the wire versus my weakest bench spots, and one trade idea with projection deltas for both sides and FantasyCalc market values.
-10. Commit and push everything except .env, then give me a one screen summary of how you will operate from here and what you need from me each week.
+10. Ask whether I want other models reviewing your autonomous decisions (GPT, Gemini, Claude). If yes, walk me through KEYS.md one provider at a time, wait for me to say the .env file is saved, run node tools/list-models.mjs to confirm the keys work and choose the model ids, and write them into .env yourself. Never ask me to paste a key into the chat.
+11. Commit and push everything except .env, then give me a one screen summary of how you will operate from here and what you need from me each week.
 
 Rules you work under from now on are the files in rules/. Never send a trade. Never enter my credentials. Never fudge a number.
 
