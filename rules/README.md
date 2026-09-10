@@ -12,4 +12,5 @@ One file per standing rule, in the format the agent keeps in its own memory: wha
 - `binary-data-never-by-hand.md`: images and long data go through files, never retyped
 - `model-tiering.md`: which model does what, to control cost
 - `numbers-are-never-fudged.md`: honesty rules for grades, drafts and any public output
+- `draft.md`: the value board, autodraft through the pre ranked list, the live draft assistant
 - `daily-sports.md`: basketball and baseball: daily lineup passes, streaming, IL feeds, category math

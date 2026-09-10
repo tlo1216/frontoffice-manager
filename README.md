@@ -35,6 +35,7 @@ No server, no bot account, no scraping. Reads go through the same league API the
 | 90 minutes before each kickoff window | Verify starters are active, compare to the bench, fix the lineup, tell you. |
 | Tuesday morning | Week is final. Waiver targets versus your weakest bench spots, proposed claims with drops, next week's reminders. |
 | When you paste a screenshot | Updates its picture of the league from your app or group chat and tells you what changed. |
+| Draft week | Builds the value board, sets your pre ranked list for autodraft, runs the live assistant in the draft room. |
 | Before any decision it would make alone | Opens a decision PR reviewed by Codex, or by GPT, Gemini and Claude through their APIs, with a weighted consensus. A disagreement reaches you first. |
 
 ## What is in the box
@@ -43,6 +44,7 @@ No server, no bot account, no scraping. Reads go through the same league API the
 START-HERE.md        the one message that sets everything up, for Claude Code or Codex
 SETUP.md             the machine: staying awake, tools, the ESPN login, restarts
 KEYS.md              optional: your own API keys for GPT, Gemini and Claude as reviewers
+DRAFT.md             draft day: the value board, autodraft through your pre ranked list, live assistant
 YAHOO-SETUP.md       Yahoo leagues: the five minute sign in
 CLAUDE.md            instructions the agent reads in your private repo
 AGENTS.md            instructions Codex follows when it reviews decisions
@@ -66,6 +68,10 @@ docs/                banner and architecture diagram
 - **Other models before autonomous action.** Decisions become pull requests that Codex reviews, or a script sends them to GPT, Gemini and Claude reviewers through their APIs and records a weighted consensus. A disagreement reaches you before anything happens.
 - **Cost aware, and your call.** Hourly polling with a silent exit, the large model for judgment, a smaller one for mechanical edits. Every model is a setting you choose: stronger models grade better and cost more, and KEYS.md says which jobs tolerate a cheaper one.
 - **Restart safe.** Reminders live in the session; the repo lets any session on any machine pick up where the last one stopped.
+
+## Draft day
+
+Before the season the agent builds a value board from your league's own slots, scoring and projections, walks you through the tiers, and turns it into the pre ranked list your platform uses to autodraft for you if you are not there. If you are there, "draft mode" makes it read every pick through the API and answer within seconds with one recommendation and two alternatives. See DRAFT.md.
 
 ## Yahoo
 
