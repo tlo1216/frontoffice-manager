@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-label="How frontoffice-manager works">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="520" fill="#0b1220"/>
+  <g font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif">
+    <!-- platform -->
+    <rect x="60" y="60" width="260" height="130" rx="14" fill="#111c33" stroke="#334155"/>
+    <text x="190" y="98" text-anchor="middle" font-size="20" font-weight="700" fill="#f8fafc">League platform</text>
+    <text x="190" y="126" text-anchor="middle" font-size="15" fill="#94a3b8">ESPN (logged in pane or cookies)</text>
+    <text x="190" y="148" text-anchor="middle" font-size="15" fill="#94a3b8">Sleeper (public API)</text>
+    <text x="190" y="172" text-anchor="middle" font-size="13" fill="#64748b">rosters, projections, injuries, moves, settings</text>
+
+    <!-- agent -->
+    <rect x="440" y="40" width="320" height="200" rx="14" fill="#0f2a1f" stroke="#4ade80"/>
+    <text x="600" y="78" text-anchor="middle" font-size="22" font-weight="700" fill="#f8fafc">Standing manager</text>
+    <text x="600" y="102" text-anchor="middle" font-size="14" fill="#a7f3d0">Claude Code or Codex, always on PC</text>
+    <text x="600" y="134" text-anchor="middle" font-size="15" fill="#e2e8f0">hourly league diff, silent when quiet</text>
+    <text x="600" y="158" text-anchor="middle" font-size="15" fill="#e2e8f0">lineup before every kickoff window</text>
+    <text x="600" y="182" text-anchor="middle" font-size="15" fill="#e2e8f0">grades every trade and pickup</text>
+    <text x="600" y="206" text-anchor="middle" font-size="15" fill="#e2e8f0">proposes moves with the numbers</text>
+    <text x="600" y="228" text-anchor="middle" font-size="13" fill="#86efac">acts only inside written authorizations</text>
+
+    <!-- owner -->
+    <rect x="880" y="60" width="260" height="130" rx="14" fill="#111c33" stroke="#334155"/>
+    <text x="1010" y="98" text-anchor="middle" font-size="20" font-weight="700" fill="#f8fafc">You, on your phone</text>
+    <text x="1010" y="126" text-anchor="middle" font-size="15" fill="#94a3b8">say yes, paste screenshots,</text>
+    <text x="1010" y="148" text-anchor="middle" font-size="15" fill="#94a3b8">send the trades yourself</text>
+    <text x="1010" y="172" text-anchor="middle" font-size="13" fill="#64748b">lineup moves pre authorized, trades never sent</text>
+
+    <!-- repo -->
+    <rect x="440" y="330" width="320" height="140" rx="14" fill="#111c33" stroke="#334155"/>
+    <text x="600" y="366" text-anchor="middle" font-size="20" font-weight="700" fill="#f8fafc">Private git repo</text>
+    <text x="600" y="392" text-anchor="middle" font-size="15" fill="#94a3b8">roster, managers, trade log, rules</text>
+    <text x="600" y="414" text-anchor="middle" font-size="15" fill="#94a3b8">standing authorizations, decisions</text>
+    <text x="600" y="440" text-anchor="middle" font-size="13" fill="#64748b">any session on any machine picks up here</text>
+
+    <!-- reviewer -->
+    <rect x="880" y="330" width="260" height="140" rx="14" fill="#1f1a33" stroke="#a78bfa"/>
+    <text x="1010" y="366" text-anchor="middle" font-size="20" font-weight="700" fill="#f8fafc">Second opinion</text>
+    <text x="1010" y="392" text-anchor="middle" font-size="15" fill="#c4b5fd">Codex reviews each decision PR</text>
+    <text x="1010" y="414" text-anchor="middle" font-size="15" fill="#c4b5fd">FantasyCalc market values</text>
+    <text x="1010" y="440" text-anchor="middle" font-size="13" fill="#64748b">a DISAGREE goes to you before any timer runs</text>
+
+    <!-- market -->
+    <rect x="60" y="330" width="260" height="140" rx="14" fill="#111c33" stroke="#334155"/>
+    <text x="190" y="366" text-anchor="middle" font-size="20" font-weight="700" fill="#f8fafc">Public data</text>
+    <text x="190" y="392" text-anchor="middle" font-size="15" fill="#94a3b8">NFL scoreboard and box scores</text>
+    <text x="190" y="414" text-anchor="middle" font-size="15" fill="#94a3b8">injury news, odds</text>
+    <text x="190" y="440" text-anchor="middle" font-size="13" fill="#64748b">every number checked before it is used</text>
+
+    <!-- arrows -->
+    <g stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#arrow)">
+      <path d="M320 125 L440 125"/>
+      <path d="M760 125 L880 125"/>
+      <path d="M600 240 L600 330"/>
+      <path d="M320 400 L440 400"/>
+      <path d="M760 400 L880 400"/>
+    </g>
+    <g stroke="#94a3b8" stroke-width="2" fill="none" marker-start="url(#arrow)">
+      <path d="M440 150 L320 150"/>
+      <path d="M760 150 L880 150"/>
+    </g>
+    <text x="380" y="118" text-anchor="middle" font-size="12" fill="#64748b">reads</text>
+    <text x="380" y="168" text-anchor="middle" font-size="12" fill="#64748b">writes (as you)</text>
+    <text x="820" y="118" text-anchor="middle" font-size="12" fill="#64748b">proposals</text>
+    <text x="820" y="168" text-anchor="middle" font-size="12" fill="#64748b">yes / no</text>
+    <text x="640" y="290" text-anchor="start" font-size="12" fill="#64748b">logs every move and grade</text>
+    <text x="820" y="392" text-anchor="middle" font-size="12" fill="#64748b">PR</text>
+  </g>
+</svg>

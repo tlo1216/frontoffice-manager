@@ -1,0 +1,4 @@
+.env
+node_modules/
+tools/sleeper-players.json
+tools/league-snapshot.txt
