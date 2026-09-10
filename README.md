@@ -22,7 +22,7 @@ It is the sanitized version of a setup that has run a real eight team ESPN leagu
 
 1. Click **Use this template** and make the copy **private**. It will hold candid notes about the people in your league.
 2. Clone it to a computer that can stay on. `SETUP.md` has the two commands that stop Windows or a Mac from sleeping.
-3. Open Claude Code or Codex in that folder and paste the one message in [`START-HERE.md`](START-HERE.md).
+3. Open Claude Code or Codex in that folder and paste the one message in [`START-HERE.md`](START-HERE.md). Read [`TIPS.md`](TIPS.md) for the setup that actually works: leave it running on a machine that never sleeps and drive it from your phone.
 4. Answer its questions. It reads your league, writes the files, sets your lineup, and schedules itself.
 
 No server, no bot account, no scraping. Reads go through the same league API the apps use. Writes happen in the platform's own page, as you.
@@ -33,6 +33,7 @@ No server, no bot account, no scraping. Reads go through the same league API the
 |---|---|
 | Hourly, 7 AM to 11 PM | Diff rosters, moves, pending claims, injuries, waiver order and settings. Silent when nothing changed. Grades and re ranks when something did. |
 | 90 minutes before each kickoff window | Verify starters are active, compare to the bench, fix the lineup, tell you. |
+| Once a week | Searches the whole league for trades, scores both sides by what each lineup gains or loses, and hands you ranked suggestions with the message to send. It never sends one. |
 | Tuesday morning | Week is final. Waiver targets versus your weakest bench spots, proposed claims with drops, next week's reminders. |
 | When you paste a screenshot | Updates its picture of the league from your app or group chat and tells you what changed. |
 | Draft week | Builds the value board, sets your pre ranked list for autodraft, runs the live assistant in the draft room. |
@@ -43,6 +44,7 @@ No server, no bot account, no scraping. Reads go through the same league API the
 ```
 START-HERE.md        the one message that sets everything up, for Claude Code or Codex
 SETUP.md             the machine: staying awake, tools, the ESPN login, restarts
+TIPS.md              how to actually run it: always on machine, phone remote, widening its authority
 KEYS.md              optional: your own API keys for GPT, Gemini and Claude as reviewers
 DRAFT.md             draft day: the value board, autodraft through your pre ranked list, live assistant
 ESPN-MCP.md          ESPN without the browser: a local MCP server for reads and validated writes

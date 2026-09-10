@@ -63,13 +63,18 @@ If the app or the PC restarts, the session's reminders are gone. Start the sessi
 - recreate the hourly watch and the kickoff reminders for the current week from the NFL schedule,
 - report the current state of your team before doing anything else.
 
-## 6. Daily rhythm the agent keeps
+## 6. The setup that works
+
+Leave the session running on a machine that never sleeps and talk to it from your phone through remote control in the desktop app. You get a message before kickoff and answer from wherever you are; the move happens on the computer at home. TIPS.md covers this and the rest of the habits worth having.
+
+## 7. Daily rhythm the agent keeps
 
 - Hourly, 7 AM to 11 PM: diff the league (rosters, moves, pending claims, injuries, waiver order, settings). Silent when nothing changed.
 - 90 minutes before each kickoff window that touches your roster: verify starters are active, compare to the bench, make pre authorized lineup moves, tell you.
+- Once a week, after the scoring period turns over: a full league trade scan with both sides scored, handed to you as ranked suggestions.
 - Tuesday morning: week is final; waiver targets against your weakest bench spots, proposed claims with drops, next week's reminders.
 - Any time: you paste a screenshot from the ESPN app or your group chat and it updates its picture of the league.
 
-## 7. What to tell it about your league
+## 8. What to tell it about your league
 
 The agent is only as good as what it knows about the other managers. After the draft, tell it in plain language: who autodrafted, who is an ally, who never reads the chat, who overvalues what. It writes each note into `league/managers.md`. That file is why it stays private.
