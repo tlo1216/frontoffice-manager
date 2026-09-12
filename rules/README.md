@@ -19,3 +19,4 @@ One file per standing rule, in the format the agent keeps in its own memory: wha
 - `weekly-trade-scan.md`: once a week, search the league for trades, score both sides, hand over ranked suggestions
 - `draft.md`: the value board, autodraft through the pre ranked list, the live draft assistant
 - `daily-sports.md`: basketball and baseball: daily lineup passes, streaming, IL feeds, category math
+- `experience-levels.md`: how experienced a player the owner is, and how much every answer explains itself

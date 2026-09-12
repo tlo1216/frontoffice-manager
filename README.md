@@ -51,6 +51,7 @@ TIPS.md              how to actually run it: always on machine, phone remote, wi
 KEYS.md              optional: your own API keys for GPT, Gemini and Claude as reviewers
 DRAFT.md             draft day: the value board, autodraft through your pre ranked list, live assistant
 ESPN-MCP.md          ESPN without the browser: a local MCP server for reads and validated writes
+CHATGPT-TUNNEL.md    optional: ask ChatGPT about your league, read-only, over a private tunnel
 YAHOO-SETUP.md       Yahoo leagues: the five minute sign in
 CLAUDE.md            instructions the agent reads in your private repo
 AGENTS.md            instructions Codex follows when it reviews decisions
@@ -81,6 +82,10 @@ docs/                banner and architecture diagram
 ## ESPN without the browser
 
 The default ESPN path is the agent's browser pane. The better one is a small local MCP server that reads and writes ESPN with your own session cookies: reads, a snapshot in the hourly diff's format, a lineup suggestion, and writes that validate eligibility, locks and roster limits in a dry run before anything is sent. No trade tools. Open source at https://github.com/tlo1216/espn-fantasy-mcp: clone, npm install, npm run build, add your cookies, register it. See ESPN-MCP.md.
+
+## Ask ChatGPT about your league
+
+Optional, and read-only. OpenAI's Secure MCP Tunnel connects the same local ESPN MCP server to the ChatGPT app, so you can ask "who do I start at flex" from your phone without opening the repo. The tunnel makes an outbound connection from your PC: no open port, no public URL, no OAuth server to build. The wrapper that launches the server for ChatGPT forces writes off for that process, so the connector can read everything and execute nothing, while your agent keeps whatever write access you gave it. Your OpenAI key is typed into a hidden local prompt and never enters a chat. See CHATGPT-TUNNEL.md.
 
 ## Draft day
 

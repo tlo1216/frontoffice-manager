@@ -45,3 +45,7 @@ Until a session restarts, or from scripts and scheduled jobs, `tools/mcp-call.mj
 ## Setup with the agent
 
 Say "set up the ESPN MCP". The agent checks Node, walks you through the cookie copy, writes the `.env` from what you paste into the file (not the chat), registers the server, restarts or uses the stdio helper, runs `get_league` and `snapshot` to prove it works, and runs one dry run `set_lineup` so you can see the validation before anything real is ever sent. Flipping `WRITES_ENABLED` to true is your call, and the agent asks.
+
+## Also: ChatGPT on your phone
+
+With this server installed you can optionally connect it to the ChatGPT app over OpenAI's Secure MCP Tunnel, read only, and ask your league questions away from the repo. The tunnel launches the server through a wrapper that forces writes off for that process, so ChatGPT previews and never executes, and your agent keeps its own write access untouched. See `CHATGPT-TUNNEL.md`.
