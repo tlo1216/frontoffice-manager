@@ -111,7 +111,14 @@ The tunnel must be running for discovery and for every call after it.
 
 To stop it: Ctrl+C in that terminal. To start it again: the same `run` command.
 
-To keep it up across reboots on Windows without leaving a terminal open, run `tools\install-tunnel-autostart.ps1` once. It registers a scheduled task that starts the tunnel at logon and restarts it if it dies, running as you so it can read your key file, with no stored password. Stop any instance you started by hand first: one tunnel-client per tunnel ID. The script prints the commands to check, stop and remove the task.
+To keep it up across reboots on Windows without leaving a terminal open, run `tools\install-tunnel-autostart.ps1` once. It registers a scheduled task that starts the tunnel at logon and restarts it within a few minutes if it stops, running as you so it can read your key file, with no stored password. Stop any instance you started by hand first: one tunnel-client per tunnel ID. The script prints the commands to check, stop and remove the task.
+
+If you write your own version of that script, four Windows details will bite you, and every one of them fails silently:
+
+- tunnel-client resolves `--profile <name>` under `$HOME/.config/tunnel-client`. Git Bash sets `HOME`; PowerShell and Task Scheduler do not, so there it looks in `%APPDATA%\tunnel-client` and exits with "read config file ...: The system cannot find the path specified". Pass `--config <full path to the yaml>` instead of `--profile`.
+- Task Scheduler mangles nested quoting in an inline `-Command` argument. Point the action at a launcher script with `-File`.
+- Windows PowerShell 5.1 wraps a native process's stderr in an ErrorRecord, so piping the daemon through `Out-File` with `$ErrorActionPreference = 'Stop'` kills it on its first stderr line and leaves an empty log. Let tunnel-client write its own log with `--log.file`.
+- A hidden scheduled task tears down its process tree when the action returns, so the launcher must start the daemon detached with `Start-Process` and return immediately.
 
 ## Why read-only, and how it is enforced
 
