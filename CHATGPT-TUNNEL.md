@@ -111,7 +111,7 @@ The tunnel must be running for discovery and for every call after it.
 
 To stop it: Ctrl+C in that terminal. To start it again: the same `run` command.
 
-To keep it up across reboots on Windows without leaving a terminal open, run `toolsinstall-tunnel-autostart.ps1` once. It registers a scheduled task that starts the tunnel at logon and restarts it if it dies, running as you so it can read your key file, with no stored password. Stop any instance you started by hand first: one tunnel-client per tunnel ID. The script prints the commands to check, stop and remove the task.
+To keep it up across reboots on Windows without leaving a terminal open, run `tools\install-tunnel-autostart.ps1` once. It registers a scheduled task that starts the tunnel at logon and restarts it if it dies, running as you so it can read your key file, with no stored password. Stop any instance you started by hand first: one tunnel-client per tunnel ID. The script prints the commands to check, stop and remove the task.
 
 ## Why read-only, and how it is enforced
 
