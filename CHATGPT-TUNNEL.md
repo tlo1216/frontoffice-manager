@@ -109,7 +109,9 @@ The tunnel must be running for discovery and for every call after it.
 
 `tunnel-client run` on a PC that stays awake. If the PC sleeps or the process stops, ChatGPT loses the connector until you start it again; nothing breaks, and your agent's own scheduled work is unaffected either way.
 
-To stop it: Ctrl+C in that terminal. To start it again: the same `run` command. For a longer-lived managed process, `tunnel-client runtimes connect` supervises it instead of a bare terminal — check `tunnel-client runtimes status <alias>` before trusting it.
+To stop it: Ctrl+C in that terminal. To start it again: the same `run` command.
+
+To keep it up across reboots on Windows without leaving a terminal open, run `toolsinstall-tunnel-autostart.ps1` once. It registers a scheduled task that starts the tunnel at logon and restarts it if it dies, running as you so it can read your key file, with no stored password. Stop any instance you started by hand first: one tunnel-client per tunnel ID. The script prints the commands to check, stop and remove the task.
 
 ## Why read-only, and how it is enforced
 
