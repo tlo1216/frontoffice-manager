@@ -1,0 +1,146 @@
+# Weekly analysis with no computer and no AI subscription.
+#
+# Every tool this runs is plain Node arithmetic over free data. No model is
+# called, nothing is sent to an AI provider, and nothing is written back to your
+# league. It reads, it computes, it commits the reports to your own repo.
+#
+# SETUP, about five minutes:
+#
+#   1. Fork or template this repo, and make your copy PRIVATE. The reports
+#      contain your league's rosters, and the .env you may add later contains
+#      credentials.
+#   2. Settings, Secrets and variables, Actions, and add these repository
+#      secrets:
+#
+#        ESPN_LEAGUE_ID   the number in your ESPN team page URL
+#        ESPN_TEAM_ID     your team's number in that same URL
+#        ESPN_S2          browser cookie, see below
+#        ESPN_SWID        browser cookie, including its curly braces
+#
+#      Get the cookies in a desktop browser logged in to ESPN: F12, Application,
+#      Cookies, https://fantasy.espn.com. These are full access to your ESPN
+#      account, so put them in secrets and nowhere else. Never in a file you
+#      commit, never in an issue, never in a chat.
+#
+#   3. Actions tab, enable workflows, and run this one manually once to check it.
+#
+# It then runs every Tuesday morning, after the scoring period closes.
+#
+# WHAT YOU GET, committed to reports/ in your own repo:
+#
+#   - lineup efficiency, what you scored against the best your roster could have
+#   - all-play record, so you can tell schedule luck from being bad
+#   - value over replacement by position, which changes who you should drop
+#   - buy and sell boards ranked by usage rather than by points
+#   - a streaming board built on the sportsbook number
+#   - win probability for your matchup, simulated with correlated outcomes
+#
+# WHAT IT WILL NEVER DO: change your lineup, make a claim, send a trade, or talk
+# to a model. For any of that you need an agent and a paid plan; see
+# START-HERE.md. This workflow is the free half.
+
+name: Weekly analysis
+
+on:
+  schedule:
+    # 13:00 UTC Tuesday, which is morning in the United States, after Monday
+    # night finishes and the scoring period turns over.
+    - cron: "0 13 * * 2"
+  workflow_dispatch:
+    inputs:
+      week:
+        description: "Week to analyse. Leave blank for the current one."
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  analyse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check the secrets are present
+        env:
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+          ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
+          ESPN_TEAM_ID: ${{ secrets.ESPN_TEAM_ID }}
+        run: |
+          missing=""
+          for v in ESPN_S2 ESPN_SWID ESPN_LEAGUE_ID ESPN_TEAM_ID; do
+            [ -n "${!v}" ] || missing="$missing $v"
+          done
+          if [ -n "$missing" ]; then
+            echo "Missing repository secrets:$missing"
+            echo "Add them under Settings, Secrets and variables, Actions."
+            exit 1
+          fi
+          echo "All four secrets are set."
+
+      - name: Build the ESPN reader
+        env:
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+          ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
+          ESPN_TEAM_ID: ${{ secrets.ESPN_TEAM_ID }}
+        run: |
+          git clone --depth 1 https://github.com/tlo1216/espn-fantasy-mcp.git ../espn-fantasy-mcp
+          cd ../espn-fantasy-mcp
+          npm install --silent
+          npm run build --silent
+          # Writes stay off. This workflow reads and nothing else, and the flag
+          # is the enforcement rather than a promise in a comment.
+          cat > .env <<EOF
+          ESPN_S2=$ESPN_S2
+          ESPN_SWID=$ESPN_SWID
+          ESPN_SPORT=ffl
+          ESPN_SEASON=$(date +%Y)
+          ESPN_LEAGUE_ID=$ESPN_LEAGUE_ID
+          ESPN_TEAM_ID=$ESPN_TEAM_ID
+          WRITES_ENABLED=false
+          EOF
+
+      - name: Work out which week to analyse
+        id: week
+        run: |
+          if [ -n "${{ github.event.inputs.week }}" ]; then
+            echo "week=${{ github.event.inputs.week }}" >> "$GITHUB_OUTPUT"
+          else
+            w=$(node tools/mcp-call.mjs get_league '{}' 2>/dev/null \
+              | grep -o '"currentScoringPeriod":[0-9]*' | cut -d: -f2)
+            # The scoring period has already turned over by Tuesday, so the week
+            # worth reporting on is the one that just finished.
+            echo "week=$(( ${w:-1} > 1 ? ${w:-1} - 1 : 1 ))" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run the analysis
+        env:
+          ESPN_TEAM_ID: ${{ secrets.ESPN_TEAM_ID }}
+        run: node tools/weekly.mjs --week ${{ steps.week.outputs.week }}
+
+      - name: Commit the reports
+        run: |
+          git config user.name "weekly-analysis"
+          git config user.email "actions@users.noreply.github.com"
+          git add reports/ || true
+          if git diff --staged --quiet; then
+            echo "Nothing changed."
+          else
+            git commit -m "Weekly analysis, week ${{ steps.week.outputs.week }}"
+            git push
+          fi
+
+      - name: Show the summary in the run log
+        if: always()
+        run: |
+          for f in reports/backtest-week-*.md reports/lineup-week-*.md reports/market.md; do
+            [ -f "$f" ] || continue
+            echo "===== $f ====="
+            head -40 "$f"
+          done

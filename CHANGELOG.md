@@ -22,6 +22,21 @@ announced.
 
 ### Added
 
+- **A free tier that needs no AI subscription and no computer.**
+  [FREE-TIER.md](FREE-TIER.md) plus a GitHub Actions workflow. Twenty of the
+  twenty-four tools in this kit call no model at all: they are arithmetic over
+  free data. That half now runs on its own, every Tuesday, committing reports
+  to your own repo. You get lineup efficiency against the best your roster
+  could have started, all-play record, value over replacement by position, buy
+  and sell boards ranked by usage rather than points, a streaming board on the
+  sportsbook line, and a win probability simulated with correlated outcomes.
+  It tells you what to do and will not do it for you; the management half still
+  needs an agent and a paid plan.
+- **`lib/data.mjs` and `lib/sim.mjs`**, the shared data layer and the matchup
+  simulator, plus `backtest`, `backtest-value`, `edge`, `lineup`, `market` and
+  `weekly` in `tools/`. Ported from a private league's setup and genericised:
+  the team id comes from `ESPN_TEAM_ID` and the manager-name file is optional.
+
 - **[NO-COMPUTER.md](NO-COMPUTER.md)**, two verified ways to run the kit without
   owning a machine that can stay on. That requirement is the first line of
   SETUP.md and it is the real barrier: the one person who got furthest with this
