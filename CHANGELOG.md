@@ -13,7 +13,7 @@ announced.
   weekly report after the first completed week, suggesting 5 dollars. The
   conditions are deliberately narrow: never timed to a win or to a moment of
   gratitude, never in a message that also contains an apology, never twice, and
-  never anywhere the owner s league mates can see it. The reasoning from the old
+  never anywhere the owner's league mates can see it. The reasoning from the old
   rule is carried forward rather than dropped, since an agent holding league
   credentials asking its user for money is a real conflict of interest.
 - **`.github/FUNDING.yml`** added but entirely commented out. An enabled entry
