@@ -29,8 +29,13 @@ announced.
   sportsbook number, and value over replacement by position. Invented teams,
   real structure. You can see what the kit produces without installing it.
 - **[TRY-IT.md](TRY-IT.md)**, a read only path that needs no cookies, no API
-  keys, no private repo and no write access. It points an agent at a public
-  Sleeper league, prints the analysis and stops.
+  keys, no private repo and no write access. It points an agent at a Sleeper
+  league, prints the analysis and stops. It says plainly that this works on
+  Sleeper only: ESPN returns 401 for every league endpoint without a session
+  cookie, public leagues included, and Yahoo needs an OAuth app first. ESPN and
+  Yahoo owners are sent to the example output instead of being allowed to walk
+  into an error. It also shows where to find a Sleeper league id, which is the
+  one thing the trial actually requires.
 
 - **`tools/guard.mjs`**, a defence against your own setup quietly getting worse
   over a season. It runs smoke tests that fail when a script produces confident
