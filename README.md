@@ -6,6 +6,7 @@
   <a href="START-HERE.md"><img alt="Start here" src="https://img.shields.io/badge/start-one%20message-4ade80?style=for-the-badge"></a>
   <a href="TRY-IT.md"><img alt="Try it with no credentials" src="https://img.shields.io/badge/try%20it-no%20credentials-38bdf8?style=for-the-badge"></a>
   <a href="docs/example-week.md"><img alt="See the output" src="https://img.shields.io/badge/see-the%20output-f472b6?style=for-the-badge"></a>
+  <a href="NO-COMPUTER.md"><img alt="No computer needed" src="https://img.shields.io/badge/no%20PC-two%20ways%20to%20run-a3e635?style=for-the-badge"></a>
   <img alt="Platforms" src="https://img.shields.io/badge/platforms-ESPN%20%7C%20Sleeper%20%7C%20Yahoo-22d3ee?style=for-the-badge">
   <img alt="Sports" src="https://img.shields.io/badge/sports-NFL%20%7C%20NBA%20%7C%20MLB-f59e0b?style=for-the-badge">
   <img alt="Agents" src="https://img.shields.io/badge/agents-Claude%20Code%20%7C%20Codex-a78bfa?style=for-the-badge">
@@ -17,6 +18,8 @@
 It is the sanitized version of a setup that has run a real eight team ESPN league since the 2026 draft.
 
 **Before you install anything:** [see what a week of output looks like](docs/example-week.md), or [run it read only against a public league](TRY-IT.md) with no cookies, no API keys and no write access.
+
+**No computer that can stay on?** That is the real barrier to this kit, and there are [two ways around it](NO-COMPUTER.md): Claude Code on the web, which needs no machine at all and can run the recurring passes on a schedule, or a permanently free cloud VM you own.
 
 <p align="center">
   <img src="docs/architecture.svg" alt="How it works" width="100%">

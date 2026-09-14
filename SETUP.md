@@ -6,6 +6,8 @@ Budget about an hour the first time. Steps 1 to 4 are one time per machine; step
 
 Pick a PC that can stay on. The manager session, its hourly league watch and its kickoff reminders all live inside the running Claude Code app. If the machine sleeps, they pause.
 
+**No machine you can leave running?** See [NO-COMPUTER.md](NO-COMPUTER.md). Claude Code on the web needs no machine at all and can run the recurring passes on a schedule, and a permanently free cloud VM is the alternative if you want the full local setup.
+
 Windows, in an Administrator PowerShell:
 
 ```

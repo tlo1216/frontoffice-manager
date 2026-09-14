@@ -22,6 +22,18 @@ announced.
 
 ### Added
 
+- **[NO-COMPUTER.md](NO-COMPUTER.md)**, two verified ways to run the kit without
+  owning a machine that can stay on. That requirement is the first line of
+  SETUP.md and it is the real barrier: the one person who got furthest with this
+  repo stopped there, not at the docs. Option one is Claude Code on the web,
+  which needs no machine and whose Routines run the recurring passes on a
+  schedule unattended. Option two is a permanently free Oracle Ampere instance,
+  2 OCPUs and 12 GB, free for the life of the account, which keeps credentials
+  on a machine the owner controls. Both carry their real caveats: a Pro or Max
+  subscription is required either way, mobile browser support is undocumented,
+  plain environment variables are readable by anyone sharing a cloud
+  environment, and Oracle ARM capacity is frequently unavailable.
+
 - **[docs/example-week.md](docs/example-week.md)**, a worked illustration of a
   week of output: lineup efficiency against the best each roster could have
   started, all-play records set beside the real standings, buy and sell boards
