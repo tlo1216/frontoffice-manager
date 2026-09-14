@@ -22,6 +22,27 @@ announced.
 
 ### Added
 
+- **Draft preparation that happens before draft day, not during it.**
+  `tools/draft-prep.mjs` builds a ranked snake queue from five seasons of
+  measured positional scarcity, excluding injured players and detecting the real
+  cliffs in each position's value curve. `tools/auction-prep.mjs` does the
+  equivalent for salary cap drafts, in dollars rather than ranks, using the
+  standard method of dividing money above replacement by each player's share of
+  league-wide value over replacement. Half-PPR is computed exactly rather than
+  estimated, since nflverse publishes both standard and full-PPR totals and
+  half-PPR is their midpoint.
+- Both builders **abort if the player pool is not a real draft pool**. Run
+  against an already-drafted league they would otherwise price that league's
+  leftovers as though they were the best players in football, and format it
+  convincingly.
+- **[DRAFT-RUNBOOK.md](DRAFT-RUNBOOK.md)**, the automation lessons from a live
+  draft that went wrong. Element references expire in under two seconds in a
+  draft room because the board re-renders on every pick in the league; pixel
+  coordinates are worse because rows shift; the only reliable pattern is
+  filtering to one position and then finding and clicking in the same batch.
+  Turning autopick on early with one good player queued is what converts an
+  impossible timing problem into a manageable list-maintenance one.
+
 - **A free tier that needs no AI subscription and no computer.**
   [FREE-TIER.md](FREE-TIER.md) plus a GitHub Actions workflow. Twenty of the
   twenty-four tools in this kit call no model at all: they are arithmetic over
