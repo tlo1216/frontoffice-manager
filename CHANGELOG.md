@@ -33,6 +33,12 @@ announced.
   subscription is required either way, mobile browser support is undocumented,
   plain environment variables are readable by anyone sharing a cloud
   environment, and Oracle ARM capacity is frequently unavailable.
+- Codex cloud is covered as its own option, because it differs in two ways that
+  matter: internet access is blocked by default during the agent phase and must
+  be enabled with an allowlist, and scheduled runs are not documented, so the
+  unattended passes are not available there. Its HTTP method restriction is
+  worth knowing about in the other direction: limiting an environment to GET
+  makes the kit read only in a way the platform enforces.
 
 - **[docs/example-week.md](docs/example-week.md)**, a worked illustration of a
   week of output: lineup efficiency against the best each roster could have

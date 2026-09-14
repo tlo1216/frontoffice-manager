@@ -19,7 +19,7 @@ It is the sanitized version of a setup that has run a real eight team ESPN leagu
 
 **Before you install anything:** [see what a week of output looks like](docs/example-week.md), or [run it read only against a public league](TRY-IT.md) with no cookies, no API keys and no write access.
 
-**No computer that can stay on?** That is the real barrier to this kit, and there are [two ways around it](NO-COMPUTER.md): Claude Code on the web, which needs no machine at all and can run the recurring passes on a schedule, or a permanently free cloud VM you own.
+**No computer that can stay on?** That is the real barrier to this kit, and there are [three ways around it](NO-COMPUTER.md): Claude Code on the web, which needs no machine at all and can run the recurring passes on a schedule, or a permanently free cloud VM you own.
 
 <p align="center">
   <img src="docs/architecture.svg" alt="How it works" width="100%">

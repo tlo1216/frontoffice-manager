@@ -1,15 +1,23 @@
-# No computer? Two ways to run this anyway
+# No computer? Three ways to run this anyway
 
 `SETUP.md` opens by telling you to pick a PC that can stay on. That is the real
 barrier to this kit, and it is worth saying plainly: it is not a documentation
 problem, it is a hardware problem. If you do not own a machine you can leave
 running, the rest of the instructions do not help you.
 
-There are two ways around it. Both were verified against current documentation
-rather than remembered, and both have honest caveats listed.
+There are three ways around it, and all were checked against current
+documentation rather than remembered. Each carries its real caveats below.
 
-**Both require a Claude Pro or Max subscription.** The free Claude.ai plan does
-not include Claude Code, on any surface. That is the one cost you cannot avoid.
+| | Needs a machine | Runs on a schedule by itself | Can change your roster |
+|---|---|---|---|
+| **1. Claude Code on the web** | no | yes, Routines | yes |
+| **1b. Codex cloud** | no | not documented | yes, if you allow POST |
+| **2. Free cloud VM** | no, you rent nothing | yes | yes |
+
+**Every option needs a paid plan of some kind.** Claude Code requires Claude Pro
+or Max; the free Claude.ai plan does not include it on any surface. Codex
+requires a ChatGPT account, and its documentation does not state which tier.
+That is the one cost you cannot avoid.
 
 ---
 
@@ -59,6 +67,49 @@ pre-kickoff lineup pass become routines.
 
 ---
 
+## Option 1b: Codex cloud. Browser only, but read mostly.
+
+Codex also runs entirely in a browser and connects to GitHub, so the shape is
+the same. Two differences matter for this kit, and both were checked against
+OpenAI's current documentation.
+
+**Internet access is blocked by default.** In OpenAI's words, "Codex blocks
+internet access during the agent phase", with only setup scripts keeping
+connectivity. This kit does nothing but talk to league APIs, so with the
+default settings it does not work at all. You have to enable internet access
+for the environment and allow the domains it needs:
+
+```
+lm-api-reads.fantasy.espn.com     ESPN reads
+fantasy.espn.com                  ESPN writes
+api.sleeper.app                   Sleeper, no auth needed
+github.com                        nflverse data files
+api.open-meteo.com                weather, optional
+```
+
+**HTTP methods can be restricted, and that turns out to be useful.** Codex can
+limit an environment to `GET`, `HEAD` and `OPTIONS`. Under that setting the kit
+reads your league perfectly and cannot change anything, because lineup moves and
+waiver claims are `POST`. If you want analysis without any possibility of the
+agent touching your roster, that is a genuinely good safety setting and it is
+enforced by the platform rather than by a rule in a file.
+
+**Scheduled runs are not documented.** OpenAI's Codex cloud docs do not describe
+recurring or automated task runs that start without a person. So the unattended
+half of a standing manager, the hourly watch and the pre-kickoff pass, is not
+something this option is documented to do. You start each pass yourself. If you
+want the scheduled behaviour with no machine, Claude Code's Routines are the
+option that documents it.
+
+**One warning worth repeating from OpenAI's own page.** Enabling internet access
+"increases security risk", specifically prompt injection from untrusted web
+content and secret exfiltration. That is not hypothetical here: this kit reads
+league chat, team names and trade notes written by other people, which is
+exactly untrusted content. `rules/untrusted-content.md` exists for that reason.
+Keep the allowlist to the domains above rather than opening everything.
+
+---
+
 ## Option 2: A free cloud machine you own
 
 If you want the full local experience, including the browser pane and writes,
@@ -94,6 +145,9 @@ comfortably.
    ```
 
 5. **Log in** by running `claude` and following the browser prompt.
+
+   Using Codex instead? Install its CLI on the same machine and skip to step 6.
+   Option 2 does not care which agent you use; it is a normal Linux box.
 6. **Clone your private copy** of this repo and paste the setup message from
    `START-HERE.md`.
 7. **Keep it alive** with `tmux` or `screen` so the session survives you closing
@@ -132,6 +186,9 @@ comfortably.
 
 If you want it working today with the least fuss, **option 1**. Routines cover
 the unattended work and there is nothing to administer.
+
+On Codex and want no machine, **option 1b**, remembering to enable internet
+access for the environment. Expect to start each pass yourself.
 
 If you want the full local behaviour, including the browser pane for ESPN writes,
 and you are comfortable with a terminal, **option 2**, accepting that getting an
