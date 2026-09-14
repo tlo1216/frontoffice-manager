@@ -22,6 +22,16 @@ announced.
 
 ### Added
 
+- **[docs/example-week.md](docs/example-week.md)**, a worked illustration of a
+  week of output: lineup efficiency against the best each roster could have
+  started, all-play records set beside the real standings, buy and sell boards
+  ranked by usage rather than by points, a streaming board built on the
+  sportsbook number, and value over replacement by position. Invented teams,
+  real structure. You can see what the kit produces without installing it.
+- **[TRY-IT.md](TRY-IT.md)**, a read only path that needs no cookies, no API
+  keys, no private repo and no write access. It points an agent at a public
+  Sleeper league, prints the analysis and stops.
+
 - **`tools/guard.mjs`**, a defence against your own setup quietly getting worse
   over a season. It runs smoke tests that fail when a script produces confident
   output over no data, checks reports for lost numeric precision, scans tracked

@@ -4,6 +4,8 @@
 
 <p align="center">
   <a href="START-HERE.md"><img alt="Start here" src="https://img.shields.io/badge/start-one%20message-4ade80?style=for-the-badge"></a>
+  <a href="TRY-IT.md"><img alt="Try it with no credentials" src="https://img.shields.io/badge/try%20it-no%20credentials-38bdf8?style=for-the-badge"></a>
+  <a href="docs/example-week.md"><img alt="See the output" src="https://img.shields.io/badge/see-the%20output-f472b6?style=for-the-badge"></a>
   <img alt="Platforms" src="https://img.shields.io/badge/platforms-ESPN%20%7C%20Sleeper%20%7C%20Yahoo-22d3ee?style=for-the-badge">
   <img alt="Sports" src="https://img.shields.io/badge/sports-NFL%20%7C%20NBA%20%7C%20MLB-f59e0b?style=for-the-badge">
   <img alt="Agents" src="https://img.shields.io/badge/agents-Claude%20Code%20%7C%20Codex-a78bfa?style=for-the-badge">
@@ -13,6 +15,8 @@
 **frontoffice-manager** turns a coding agent into a standing manager for your fantasy football, basketball or baseball team. It reads your league every hour, sets your lineup before every kickoff, grades every trade and pickup in the league with projections and market values, proposes moves with the numbers, and keeps a written record of everything in a private repo. You keep the veto: lineup moves are pre authorized, adds and drops need your yes or a timer you define, and trades are never sent by the agent.
 
 It is the sanitized version of a setup that has run a real eight team ESPN league since the 2026 draft.
+
+**Before you install anything:** [see what a week of output looks like](docs/example-week.md), or [run it read only against a public league](TRY-IT.md) with no cookies, no API keys and no write access.
 
 <p align="center">
   <img src="docs/architecture.svg" alt="How it works" width="100%">
