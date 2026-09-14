@@ -5,6 +5,21 @@ announced.
 
 ## Unreleased
 
+### Changed
+
+- **Support asks are now permitted, once.** `rules/never-ask-for-money.md` is
+  replaced by `rules/asking-for-support.md`. The kit stays free with nothing
+  gated, and the agent may ask for support a single time, at the end of a
+  weekly report after the first completed week, suggesting 5 dollars. The
+  conditions are deliberately narrow: never timed to a win or to a moment of
+  gratitude, never in a message that also contains an apology, never twice, and
+  never anywhere the owner s league mates can see it. The reasoning from the old
+  rule is carried forward rather than dropped, since an agent holding league
+  credentials asking its user for money is a real conflict of interest.
+- **`.github/FUNDING.yml`** added but entirely commented out. An enabled entry
+  pointing at a profile that does not exist renders a Sponsor button leading
+  nowhere, which is worse than no button.
+
 ### Added
 
 - **`tools/guard.mjs`**, a defence against your own setup quietly getting worse

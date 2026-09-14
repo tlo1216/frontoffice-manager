@@ -1,0 +1,15 @@
+# Nothing here is active yet. Every line is commented on purpose: an enabled
+# entry that points at a profile which does not exist renders a Sponsor button
+# that leads nowhere, which looks worse than no button.
+#
+# To turn it on, enable one platform and uncomment its line:
+#   GitHub Sponsors  https://github.com/sponsors/  (needs enabling on the account)
+#   Ko-fi            https://ko-fi.com/            (no approval needed, fastest)
+#   Buy Me a Coffee  https://buymeacoffee.com/
+#
+# The suggested amount is 5 dollars. See rules/asking-for-support.md, which
+# governs the one time in-product ask and is deliberately narrow.
+
+# github: tlo1216
+# ko_fi: your-handle
+# buy_me_a_coffee: your-handle
