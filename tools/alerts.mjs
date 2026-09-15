@@ -36,6 +36,7 @@
 
 import process from "node:process";
 import { games, injuries, idMap, num } from "../lib/data.mjs";
+import { getJSON } from "../lib/net.mjs";
 
 const argv = process.argv.slice(2);
 const arg = (k, d) => { const i = argv.indexOf("--" + k); return i >= 0 ? argv[i + 1] : d; };
@@ -71,12 +72,15 @@ const base = `https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/${
 // for settings first, work out the week, then fetch the roster FOR that week.
 // Fetching once without the period returns every projection as zero, which is
 // not an error and looks exactly like a roster of broken players.
-const meta = await fetch(`${base}?view=mSettings&view=mTeam&nocache=${Math.random()}`, { headers })
-  .then((r) => { if (r.status === 401) throw new Error("ESPN returned 401. Your cookies have expired; refresh ESPN_S2 and ESPN_SWID."); return r.json(); });
+const metaRes = await getJSON(`${base}?view=mSettings&view=mTeam&nocache=${Math.random()}`, { headers });
+if (metaRes.fatal) { console.error("ESPN returned 401. Your cookies have expired; refresh ESPN_S2 and ESPN_SWID."); process.exit(2); }
+if (!metaRes.ok) { console.error("ESPN did not answer after three tries: " + metaRes.soft + ". Nothing is wrong with your roster; try again in a few minutes."); process.exit(2); }
+const meta = metaRes.json;
 const week = WEEK_ARG || num(meta.status?.currentMatchupPeriod) || 1;
 
-const lg = await fetch(`${base}?view=mRoster&view=mSettings&view=mTeam&scoringPeriodId=${week}&nocache=${Math.random()}`, { headers })
-  .then((r) => r.json());
+const lgRes = await getJSON(`${base}?view=mRoster&view=mSettings&view=mTeam&scoringPeriodId=${week}&nocache=${Math.random()}`, { headers });
+if (!lgRes.ok) { console.error("ESPN did not answer after three tries: " + (lgRes.fatal || lgRes.soft)); process.exit(2); }
+const lg = lgRes.json;
 const team = (lg.teams || []).find((t) => t.id === TEAM);
 if (!team) { console.error(`Team ${TEAM} is not in league ${LEAGUE}.`); process.exit(2); }
 const sched = (await games()).filter((g) => Number(g.season) === SEASON);
