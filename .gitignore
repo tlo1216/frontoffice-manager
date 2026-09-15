@@ -16,3 +16,8 @@ draft-board.json
 node_modules/
 tools/sleeper-players.json
 tools/*.csv
+
+# Downloaded data caches. Rebuilt on demand, never committed.
+tools/.cache/
+.cache/
+cache/
