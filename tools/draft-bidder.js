@@ -59,7 +59,7 @@
   const TEAMS = "ARI|ATL|BAL|BUF|CAR|CHI|CIN|CLE|DAL|DEN|DET|GB|HOU|IND|JAX|KC|LV|LAC|LAR|MIA|MIN|NE|NO|NYG|NYJ|PHI|PIT|SF|SEA|TB|TEN|WSH|WAS|FA";
 
   const state = {
-    worker: null, targets: {}, posOf: {}, want: null, roster: 16, reserve: 1,
+    worker: null, targets: {}, posOf: {}, want: null, roster: 16, reserve: 1, defaultTarget: undefined,
     ticks: 0, log: [], errors: [], stopped: true, capShare: 0.35,
   };
 
@@ -69,7 +69,16 @@
     if (!card) return null;
     const first = (card.innerText || "").split("\n")[0];
     const m = first.match(new RegExp("^(.*?)(" + TEAMS + ")(QB|RB|WR|TE|K|D\\/ST)$"));
-    return m ? { name: m[1], team: m[2], pos: m[3], card } : null;
+    if (m) return { name: m[1], team: m[2], pos: m[3], card };
+    // RULE 8. A TEAM DEFENCE PRINTS AS "Seahawks D/ST", with no team column and
+    // no position column, so the strict form above never matched and every
+    // defence nomination was silently skipped. Found live in Minnesota with a
+    // defence slot still empty and the bidder reporting itself healthy, which
+    // is the same shape of failure as every other one in this file: no error,
+    // no bid, no sign anything was wrong.
+    const d = first.match(/^(.+?)\s+D\/ST$/);
+    if (d) return { name: first.trim(), team: d[1].trim(), pos: "D/ST", card };
+    return null;
   }
 
   /** What we already own, by position, read from the roster panel. */
@@ -87,15 +96,20 @@
       filled++;
       // The panel prints the SLOT, which is not the position for a flex. Match
       // the player against our own board to learn his real position.
-      const surname = who.replace(/^[A-Z]\.\s*/, "").trim();
-      for (const name of Object.keys(state.targets)) {
-        if (name.split(" ").slice(-1)[0] === surname.split(" ").slice(-1)[0]) {
+      const surname = who.replace(/^[A-Z]\.\s*/, "").trim().split(" ").slice(-1)[0];
+      let matched = false;
+      for (const name of Object.keys(state.posOf)) {
+        if (name.split(" ").slice(-1)[0] === surname) {
           const pos = state.posOf[name];
-          if (pos && counts[pos] !== undefined) counts[pos]++;
+          if (pos && counts[pos] !== undefined) { counts[pos]++; matched = true; }
           break;
         }
       }
-      if (POSITIONS.includes(slot) && !Object.values(counts).some(Boolean)) counts[slot]++;
+      // RULE 9. THE SLOT FALLBACK RUNS PER ROW, NOT ONCE. It used to be guarded
+      // by "no position counted yet", so the first filled row counted and every
+      // row after it counted for nothing. A roster of five receivers then read
+      // as one, and rule 5 waved through a sixth.
+      if (!matched && POSITIONS.includes(slot) && counts[slot] !== undefined) counts[slot]++;
     }
     return { counts, filled };
   }
@@ -109,7 +123,8 @@
       const text = nom.card.innerText;
       if (/WINNING/.test(text)) return;                       // already ours
 
-      const target = state.targets[nom.name];
+      let target = state.targets[nom.name];
+      if (target === undefined) target = state.defaultTarget;
       if (target === undefined) return;                       // not on the board
 
       const { counts, filled } = owned();
@@ -152,6 +167,13 @@
       state.targets = o.targets || {};
       state.posOf = o.posOf || {};
       state.want = o.want || { QB: 1, RB: 5, WR: 5, TE: 2, K: 1, "D/ST": 1 };
+      // RULE 10. THE ENDGAME HAS ONE PRICE. Once the budget divided by the
+      // empty slots reaches a dollar, ESPN's MAX is a dollar for everybody and
+      // a per player valuation has nothing left to say. defaultTarget lets the
+      // board mean "anyone at a position we still need", so a whitelist that
+      // went stale forty picks ago cannot leave a slot empty. It is only ever
+      // safe because rule 4 still caps the bid and rule 5 still checks need.
+      state.defaultTarget = o.defaultTarget == null ? undefined : o.defaultTarget;
       state.roster = o.roster || 16;
       state.reserve = o.reserve == null ? 1 : o.reserve;
       state.capShare = o.capShare == null ? 0.35 : o.capShare;
