@@ -5,6 +5,17 @@
 // It reads every pick made so far, removes them from the board, and returns the
 // best available for your remaining roster needs with a "likely gone before your
 // next pick" flag based on ADP.
+//
+// KNOW THIS BEFORE YOU TRUST IT MID DRAFT. The read API this uses LAGS during a
+// live draft, sometimes by several picks. Measured on a real auction: it
+// reported an empty roster and a full budget while three players had already
+// been bought in the room. It catches up within a minute or two, and it is
+// accurate once a draft is over.
+//
+// So use it BETWEEN picks as a board, not as a live feed, and when it matters
+// trust the draft room itself over anything this prints. If the pick count it
+// reports is behind what the room shows, wait and run it again rather than
+// drafting off it.
 const SEASON = 2026, LEAGUE_ID = 'YOUR_LEAGUE_ID', MY_TEAM_ID = 0, SPORT = 'ffl';
 const BOARD = null; // <- the agent replaces null with the JSON object from draft-board.json
 const base = 'https://lm-api-reads.fantasy.espn.com/apis/v3/games/' + SPORT + '/seasons/' + SEASON + '/segments/0/leagues/' + LEAGUE_ID;
