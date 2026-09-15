@@ -17,7 +17,12 @@ const M = await j(base + '?view=mTeam');
 const S = await j(base + '?view=mSettings');
 const P = await j(base + '?view=mPendingTransactions');
 const FA = await j(base + '?scoringPeriodId=1&view=kona_player_info', { 'X-Fantasy-Filter': JSON.stringify({ players: { filterStatus: { value: ['FREEAGENT', 'WAIVERS'] }, limit: 60, sortPercOwned: { sortPriority: 1, sortAsc: false } } }) });
-const sp = p => { const s = (p.stats || []).find(x => x.statSourceId === 1 && x.scoringPeriodId === 0 && x.seasonId === SEASON); return s ? Math.round(s.appliedTotal) : 0; };
+// statSplitTypeId is pinned deliberately. ESPN keeps several projection rows per
+// player and their order is not stable, so matching on source, period and season
+// alone returns whichever split happens to be listed first. Two decimals, not
+// whole points: fantasy weeks are decided in tenths and rounding here throws
+// that resolution away for every caller downstream.
+const sp = p => { const s = (p.stats || []).find(x => x.statSourceId === 1 && x.statSplitTypeId === 0 && x.scoringPeriodId === 0 && x.seasonId === SEASON); return s ? Math.round(s.appliedTotal * 100) / 100 : 0; };
 const lines = ['# League snapshot ' + new Date().toLocaleString() + '. Format: teamId|playerId|name|injury|seasonProj ; FA rows add |pctOwned'];
 for (const t of R.teams) for (const e of (t.roster ? t.roster.entries : [])) { const p = e.playerPoolEntry.player; lines.push([t.id, p.id, p.fullName, p.injuryStatus, sp(p)].join('|')); }
 for (const x of (FA.players || [])) { const p = x.player; lines.push(['FA', p.id, p.fullName, p.injuryStatus, sp(p), Math.round(p.ownership ? p.ownership.percentOwned : 0)].join('|')); }

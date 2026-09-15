@@ -24,7 +24,28 @@
 #
 #   3. Actions tab, enable workflows, and run this one manually once to check it.
 #
-# It then runs every Tuesday morning, after the scoring period closes.
+# HOW OFTEN IT RUNS. The full report is weekly, on Tuesday, because that is when
+# a week has finished and there is something new to say about it. The ALERTS run
+# more often, because what they catch is what you can still fix: an empty
+# starting slot, a man on bye in your lineup, a starter who is out, somebody on
+# your bench or on the wire projected higher, and the Wednesday to Friday
+# practice reports.
+#
+# To change the cadence set a repository VARIABLE (Settings, Secrets and
+# variables, Actions, then the Variables tab) named ALERTS:
+#
+#   ALERTS = gameday   the default. Wednesday, Thursday, Friday and Sunday.
+#   ALERTS = daily     every morning.
+#   ALERTS = off       Tuesday only, nothing else.
+#
+# You never have to edit this file to change it, which matters when the only
+# device you own is a phone.
+#
+# YOU CAN STILL ASK IT THINGS. The free tier has no agent, but the reports are
+# plain markdown sitting in your own repo. Open them on your phone, or paste one
+# into any free AI chat and ask what to do about it. The tools also run on
+# demand: the Actions tab has a Run workflow button, and every tool takes a week
+# number. What the free tier does not include is something that acts for you.
 #
 # WHAT YOU GET, committed to reports/ in your own repo:
 #
@@ -39,13 +60,20 @@
 # to a model. For any of that you need an agent and a paid plan; see
 # START-HERE.md. This workflow is the free half.
 
-name: Weekly analysis
+name: Analysis
 
 on:
   schedule:
-    # 13:00 UTC Tuesday, which is morning in the United States, after Monday
-    # night finishes and the scoring period turns over.
+    # Tuesday 13:00 UTC: the full weekly report, after the scoring period turns.
     - cron: "0 13 * * 2"
+    # Wednesday and Friday: practice reports publish through the week.
+    - cron: "0 13 * * 3,5"
+    # Thursday afternoon, before the night game.
+    - cron: "0 21 * * 4"
+    # Sunday morning, about two hours before the early kickoffs.
+    - cron: "0 14 * * 0"
+    # Monday and Saturday, only used when ALERTS is set to daily.
+    - cron: "0 13 * * 1,6"
   workflow_dispatch:
     inputs:
       week:
@@ -64,6 +92,29 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+
+      - name: Decide what this run should do
+        id: plan
+        env:
+          ALERTS: ${{ vars.ALERTS }}
+        run: |
+          dow=$(date -u +%u)          # 1 Monday through 7 Sunday
+          mode="${ALERTS:-gameday}"
+          full=no; alerts=no
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            alerts=yes; full=yes
+          elif [ "$dow" = "2" ]; then
+            full=yes; alerts=yes        # Tuesday is always the full report
+          else
+            case "$mode" in
+              off)   : ;;
+              daily) alerts=yes ;;
+              *)     case "$dow" in 3|4|5|7) alerts=yes ;; esac ;;
+            esac
+          fi
+          echo "full=$full" >> "$GITHUB_OUTPUT"
+          echo "alerts=$alerts" >> "$GITHUB_OUTPUT"
+          echo "Mode $mode, weekday $dow. Full report: $full. Alerts: $alerts."
 
       - name: Check the secrets are present
         env:
@@ -84,6 +135,7 @@ jobs:
           echo "All four secrets are set."
 
       - name: Build the ESPN reader
+        if: steps.plan.outputs.full == 'yes'
         env:
           ESPN_S2: ${{ secrets.ESPN_S2 }}
           ESPN_SWID: ${{ secrets.ESPN_SWID }}
@@ -107,7 +159,9 @@ jobs:
           EOF
 
       - name: Work out which week to analyse
+        if: steps.plan.outputs.full == 'yes'
         id: week
+        if: steps.plan.outputs.full == 'yes'
         run: |
           if [ -n "${{ github.event.inputs.week }}" ]; then
             echo "week=${{ github.event.inputs.week }}" >> "$GITHUB_OUTPUT"
@@ -120,9 +174,22 @@ jobs:
           fi
 
       - name: Run the analysis
+        if: steps.plan.outputs.full == 'yes'
         env:
           ESPN_TEAM_ID: ${{ secrets.ESPN_TEAM_ID }}
         run: node tools/weekly.mjs --week ${{ steps.week.outputs.week }}
+
+      - name: Run the alerts
+        if: steps.plan.outputs.alerts == 'yes'
+        env:
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          ESPN_SWID: ${{ secrets.ESPN_SWID }}
+          ESPN_LEAGUE_ID: ${{ secrets.ESPN_LEAGUE_ID }}
+          ESPN_TEAM_ID: ${{ secrets.ESPN_TEAM_ID }}
+        run: |
+          mkdir -p reports
+          node tools/alerts.mjs > reports/alerts.md || true
+          cat reports/alerts.md
 
       - name: Commit the reports
         run: |
@@ -132,14 +199,14 @@ jobs:
           if git diff --staged --quiet; then
             echo "Nothing changed."
           else
-            git commit -m "Weekly analysis, week ${{ steps.week.outputs.week }}"
+            git commit -m "Analysis, $(date -u +%Y-%m-%d)"
             git push
           fi
 
       - name: Show the summary in the run log
         if: always()
         run: |
-          for f in reports/backtest-week-*.md reports/lineup-week-*.md reports/market.md; do
+          for f in reports/alerts.md reports/backtest-week-*.md reports/lineup-week-*.md reports/market.md; do
             [ -f "$f" ] || continue
             echo "===== $f ====="
             head -40 "$f"

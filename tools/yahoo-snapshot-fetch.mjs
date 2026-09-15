@@ -26,7 +26,7 @@ const teams = objs(teamsRaw.fantasy_content.league[1].teams).map(t => merge(t.te
 let proj = {};
 try {
   const p = await (await fetch(`https://api.sleeper.com/projections/${SPORT}/${SEASON}?season_type=regular&position[]=QB&position[]=RB&position[]=WR&position[]=TE&position[]=K&position[]=DEF&position[]=PG&position[]=SG&position[]=SF&position[]=PF&position[]=C&order_by=pts_ppr`)).json();
-  for (const row of p) { const pl = row.player || {}; const key = ((pl.first_name || '') + ' ' + (pl.last_name || '')).trim().toLowerCase(); proj[key] = Math.round((row.stats && (row.stats.pts_ppr || row.stats.pts_std)) || 0); }
+  for (const row of p) { const pl = row.player || {}; const key = ((pl.first_name || '') + ' ' + (pl.last_name || '')).trim().toLowerCase(); proj[key] = Math.round(((row.stats && (row.stats.pts_ppr || row.stats.pts_std)) || 0) * 100) / 100; }
 } catch (e) { /* projections unavailable; zeros */ }
 const lines = ['# Yahoo snapshot ' + new Date().toLocaleString() + '. Format: teamId|playerId|name|injury|seasonProj ; FA rows add |pctOwned. Projections from Sleeper by name; 0 means unmatched or unavailable.'];
 for (const t of teams) {

@@ -15,10 +15,56 @@ So there are two halves, and you can have the second one for nothing.
 | Analysis and reports | **yes, all of it** | yes |
 | Sets your lineup | no | yes |
 | Waiver claims, roster moves | no | yes, at the autonomy level you pick |
-| Answers questions, explains itself | no | yes |
+| Answers questions, explains itself | **on demand, see below** | yes, unprompted |
 | Sends trades | never | never, it is a hard limit of the kit |
 
 The free tier tells you exactly what to do. It just will not do it for you.
+
+## You can still ask it things
+
+The free tier has no agent watching your team, but it is not a one way report.
+
+**The reports are plain markdown in your own repo.** Open one on your phone and
+read it. Every number is explained where it appears, because these were written
+to be read by a person rather than parsed by a machine.
+
+**Paste one into any free AI chat and ask.** The reports are deliberately small
+and self contained for exactly this. Drop `reports/alerts.md` or a weekly report
+into whatever free chat you already use and ask what to do about it, whether a
+trade is good, who to start. You are supplying the analysis, which is the
+expensive part; the chat only has to read it. This works on a free account of
+any assistant, because nothing in the reports is specific to one.
+
+**Run it whenever you want an answer.** The Actions tab has a Run workflow
+button that works fine from a phone browser, and it takes a week number, so you
+can ask about any week instead of waiting for Tuesday.
+
+What the paid tier adds is not knowledge. It is ACTION and INITIATIVE: something
+that notices without being asked, and that changes your lineup rather than
+telling you to change it.
+
+## How often it runs
+
+The full report is weekly, on Tuesday, when a week has actually finished and
+there is something new to say about it.
+
+The **alerts** run more often, because what they catch is what you can still fix:
+an empty starting slot, a man on bye sitting in your lineup, a starter who is
+out, somebody on your bench or on the wire projected higher, a bye week pile up
+coming in a few weeks, and the Wednesday to Friday practice reports with what
+each injury tag is measured to cost.
+
+Set a repository variable named `ALERTS` (Settings, then Secrets and variables,
+then Actions, then the Variables tab):
+
+| `ALERTS` | When the alerts run |
+|---|---|
+| `gameday` | the default: Wednesday, Thursday, Friday and Sunday |
+| `daily` | every morning |
+| `off` | Tuesday only |
+
+You never have to edit a file to change it, which matters when the only device
+you own is a phone.
 
 ---
 

@@ -1,4 +1,10 @@
-// Auction (salary cap) draft values, with half-PPR scoring.
+// Auction (salary cap) draft values.
+//
+// SCORING IS INHERITED, NOT COMPUTED. Every dollar here is seasonProjection
+// minus replacement, and those projections come from ESPN for a specific
+// league, so the board is full PPR or half PPR entirely according to which
+// league supplied them. An earlier version computed a half-PPR historical curve,
+// never used the result, and printed "half-PPR" over every board it produced.
 //
 //   node tools/auction-prep.mjs --teams 10 --budget 200 --roster 16
 //   node tools/auction-prep.mjs --league <id> --write     once the league exists
@@ -23,16 +29,11 @@
 // A consequence people get wrong: replacement-level players are worth exactly
 // one dollar, not "cheap". If a position has ten startable players and ten
 // teams, the tenth is worth a dollar no matter how good he looks in isolation.
-//
-// HALF-PPR. Receptions are worth 0.5 rather than 1, which moves value away from
-// high-volume short receivers and toward running backs and deep threats. The
-// historical curve below is computed exactly: nflverse gives both standard and
-// full-PPR totals, so half-PPR is their midpoint rather than an estimate.
 
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
-import { REPO, playerWeeks, num } from "../lib/data.mjs";
+import { REPO, num } from "../lib/data.mjs";
 
 const argv = process.argv.slice(2);
 const arg = (k, d) => { const i = argv.indexOf("--" + k); return i >= 0 ? argv[i + 1] : d; };
@@ -60,31 +61,6 @@ function mcp(tool, args) {
   return JSON.parse(out.slice(0, end + 1));
 }
 
-// --- half-PPR historical shape ----------------------------------------------
-// nflverse publishes standard and full-PPR totals. Half-PPR is exactly halfway,
-// because the only difference is the per-reception weight.
-
-async function halfPprCurve() {
-  const byPos = {};
-  for (const season of SEASONS) {
-    const tot = new Map();
-    for (const r of await playerWeeks(season)) {
-      if (!["QB", "RB", "WR", "TE"].includes(r.position)) continue;
-      const half = (num(r.fantasy_points) + num(r.fantasy_points_ppr)) / 2;
-      const t = tot.get(r.player_id) || { pos: r.position, pts: 0 };
-      t.pts += half;
-      tot.set(r.player_id, t);
-    }
-    for (const { pos, pts } of tot.values()) ((byPos[pos] ||= []).push(pts));
-  }
-  const curve = {};
-  for (const [pos, all] of Object.entries(byPos)) {
-    const sorted = all.sort((a, b) => b - a);
-    curve[pos] = sorted.slice(0, 80).map((v) => v / SEASONS.length * 1); // per-season scale
-  }
-  return curve;
-}
-
 // --- current pool -----------------------------------------------------------
 
 function pool() {
@@ -108,7 +84,6 @@ if (LEAGUE) {
   } catch { console.error("could not read the league; using defaults"); }
 }
 
-const curve = await halfPprCurve();
 const players = pool();
 if (players.length < 50) { console.error(`Only ${players.length} players returned. Check the league id and cookies.`); process.exit(2); }
 
@@ -170,7 +145,7 @@ for (const p of priced) p.dollars = Math.max(1, Math.round((p.vor / totalVor) * 
 
 const L = [];
 const say = (s = "") => L.push(s);
-say(`# Auction values, half-PPR${LEAGUE ? `, league ${LEAGUE}` : " (pre-join estimate)"}`);
+say(`# Auction values${LEAGUE ? `, league ${LEAGUE}, its own scoring` : " (pre-join estimate)"}`);
 say("");
 say(`${TEAMS} teams, $${BUDGET} cap, ${ROSTER} roster spots. Starters: ` +
   Object.entries(STARTERS).filter(([, n]) => n).map(([p, n]) => `${n} ${p}`).join(", ") + (FLEX ? `, ${FLEX} FLEX` : "") + ".");
