@@ -1,7 +1,7 @@
 // Build a draft queue before draft day, from measured positional scarcity.
 //
-//   node tools/draft-prep.mjs --league 107339775 --teams 10
-//   node tools/draft-prep.mjs --league 107339775 --teams 10 --write
+//   node tools/draft-prep.mjs --league <your league id> --teams 10
+//   node tools/draft-prep.mjs --league <your league id> --teams 10 --write
 //
 // Local compute, no model turn. Writes reports/draft-queue-<league>.md and a
 // plain ordered list for pasting into a platform's pre-rank screen.

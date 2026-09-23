@@ -131,8 +131,24 @@ if (fs.existsSync(reports)) for (const f of fs.readdirSync(reports).filter((f) =
 
 // --- 4. secrets ------------------------------------------------------------
 // This repo is public. A key committed once is a key that has to be rotated.
-
-const SECRET = /(sk-[A-Za-z0-9_-]{20,}|AIza[A-Za-z0-9_-]{30,}|espn_s2=|SWID=\{)/;
+//
+// THE ESPN HALF OF THIS REGEX USED TO BE JUST "espn_s2=" and "SWID={", with no
+// value pattern after either. That does not detect a leaked cookie: it
+// detects the literal text "espn_s2=", which is also exactly how every tool
+// that builds an ESPN cookie header writes the code that reads the real value
+// out of .env (`` `espn_s2=${s2}; SWID=${swid}` ``). Run as shipped, this
+// failed on lib/data.mjs, tools/alerts.mjs, tools/draft-board.mjs,
+// tools/espn-cookie-fetch.mjs, and even this file's own source, none of which
+// hold a credential. A guard that cries wolf on every legitimate cookie header
+// is a guard people learn to ignore, which is worse than not having one. It
+// was also lowercase-only, so a real leak pasted from a .env file
+// (ESPN_S2=..., uppercase) would have passed clean.
+//
+// The fix requires an actual value after the key: something that is not a
+// template interpolation (the negative lookahead) and is long enough to be a
+// real cookie rather than a variable name, case-insensitively so a leak from
+// either the header-building code or a raw .env-style paste is caught.
+const SECRET = /(sk-[A-Za-z0-9_-]{20,}|AIza[A-Za-z0-9_-]{30,}|espn_s2=(?!\$\{)[A-Za-z0-9%._-]{10,}|swid=(?!\$\{)\{?[0-9A-Fa-f]{6,})/i;
 function scanTracked() {
   const r = spawnSync("git", ["ls-files"], { cwd: REPO, encoding: "utf8" });
   for (const f of (r.stdout || "").split("\n").filter(Boolean)) {

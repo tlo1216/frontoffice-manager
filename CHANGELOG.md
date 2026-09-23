@@ -5,6 +5,103 @@ announced.
 
 ## Unreleased
 
+### Fixed
+
+- **The matchup simulator was understating variance by roughly three to one.**
+  `lib/sim.mjs` recentred a resampled week on a player's own projection
+  without rescaling it to his position's real spread, so a receiver projected
+  14.4 came out with a week-to-week coefficient of variation around 0.19
+  against a measured 0.64. Every win probability the kit computes from it —
+  `tools/lineup.mjs`'s start/sit calls and its leverage figure — was more
+  confident than the data supports, pulled toward whoever was already ahead.
+  Fixed by standardising the resampled week and scaling it to the measured
+  spread for its position instead. `tools/check-sim.mjs`, new below, is what
+  caught it: it simulates a player against a known real-world spread and
+  fails on drift, rather than only checking that the simulator produced
+  output at all.
+- **`tools/draft-board.mjs` could read a stale projection.** Its stat lookup
+  pinned `statSourceId` and `scoringPeriodId` but not `statSplitTypeId`, and
+  ESPN carries more than one entry under the same source and period once the
+  season is under way. An unpinned read returns whichever one ESPN lists
+  first, not necessarily the current one.
+- **`tools/guard.mjs`'s credential scan matched the code that reads a cookie,
+  not a leaked one.** It looked for the bare text `espn_s2=`, which is also
+  how every tool that builds an ESPN cookie header from `.env` writes the
+  line (`` `espn_s2=${s2}` ``), so it failed on several files that hold no
+  credential at all. Being lowercase-only, it also would have missed a real
+  leak pasted from a `.env` file (`ESPN_S2=...`, uppercase). It now requires
+  an actual value after the key, rejects a template interpolation, and checks
+  case-insensitively.
+
+### Added
+
+- **A measured-numbers registry, so a backtested figure cannot quietly go
+  stale.** `lib/measured.mjs` lets a harness record what it measured, with a
+  sample size and a source, and lets a consumer read that measurement with a
+  literal only as the fallback for a fresh checkout. `tools/constants-audit.mjs`
+  (`league/constants.json`) then checks that every such number in `lib/` is
+  declared, that the declared literal matches what the code actually carries,
+  and reports the age of anything measured, so a figure nobody has re-derived
+  in months is visible rather than silently trusted.
+- **`tools/check-sim.mjs`**, which validates the matchup simulator against a
+  real, known spread rather than just checking it runs. A model that outputs
+  a probability distribution can be completely broken while still printing a
+  confident, well-formatted number every time; this is what actually caught
+  the variance bug above, and will catch the next one like it.
+- **`tools/check-mirror.mjs`**, for anyone keeping a `rules/` folder in sync
+  with an agent's own memory (the way this kit's `START-HERE.md` sets up):
+  it diffs the two and fails if a rule exists in one and not the other, so a
+  session recovered from git alone can't silently be missing a standing
+  instruction.
+- **`tools/health-check.mjs`**, a cheap check to run at the top of any
+  scheduled pass: is the ESPN cookie still alive, is the configured team
+  still in the league, and have the scoring or roster settings changed since
+  last run. A commissioner tweaking a scoring rule invalidates every
+  valuation the kit has computed without changing a line of code, and
+  nothing else here would notice.
+- **`lib/byes.mjs`**, bye-week analysis that goes past "how many starters are
+  off this week" to which SLOT cannot be filled at all: losing two receivers
+  costs almost nothing, losing your only tight end is a hole nothing else on
+  the bench fills. Includes a roster-cut ranking (surplus position first,
+  then value against the wire, with bye-week cover only breaking a near tie)
+  and a bye table derived from the current schedule and a player's current
+  NFL team, rather than a name-keyed file that goes stale the day someone
+  changes teams.
+- **`tools/bye-map.mjs`**, which builds a `{ "Player Name": week }` bye map
+  for any league you can read, for pasting into your own draft or keeper
+  tooling.
+- **`tools/code-review.mjs`**, a weekly self-check for the codebase rather
+  than the roster: duplicated constants that a shared module already solves,
+  spent one-off scripts still sitting in `tools/`, patterns that have
+  produced a wrong number before (a rounding call in a data path, a stat
+  lookup that pins its source but not its split type, a swallowed error),
+  and whether `tools/guard.mjs` still has more ways to fail than to pass.
+  Measures and proposes; it does not auto-fix, on the theory that a script
+  editing forty files at 9 AM on a Sunday is how a working system breaks.
+  Running it against this repo is also what found the three fixes above.
+- **`tools/injury-check.mjs`**, which reads ESPN's injury status (live, but
+  only one word) alongside the nflverse practice report (published
+  Wednesday through Friday, and a better predictor of whether a man's
+  performance is actually affected) and prices the gap in points per game,
+  split by practice bucket so a questionable player who practised in full is
+  priced differently from one who did not.
+- **`tools/stream-check.mjs`** for kickers and defenses: who they are barely
+  matters week to week (measured week-to-week persistence around 0.03-0.04
+  for both), which game they're in matters a great deal (a kicker's own
+  team's implied total, a defense's opponent's), and the tool compares your
+  two against what your league's wire actually has rather than a
+  league-wide ideal.
+- **`lib/data.mjs` gained `espnHeaders()` and `espnConfig()`**, centralizing
+  the ESPN cookie read and the league/team/season lookup that five different
+  tools each carried their own copy of, plus `forwardProjection()` and
+  `seasonProjection()`, which pin every field ESPN uses to distinguish one
+  stat entry from another (source, split type, scoring period, and season)
+  rather than trusting `find()` to return the right one on its own — the
+  same class of bug fixed in `tools/draft-board.mjs` above — and
+  `pendingAdds()`, so a tool that files waiver claims on a schedule can see
+  what it already filed and not spam the same claim every morning until it
+  settles.
+
 ### Changed
 
 - **Support asks are now permitted, once.** `rules/never-ask-for-money.md` is

@@ -14,7 +14,7 @@
 //   "flexPositions": ["RB","WR","TE"],
 //   "myTeam": "5",
 //   "allies": ["3","6"],
-//   "names": {"5":"You","3":"Robert","6":"Brennan"},
+//   "names": {"5":"You","3":"Ally A","6":"Ally B"},
 //   "teams": {"5":[{"name":"Joe Burrow","pos":"QB","proj":304,"untouchable":false}], ...}
 // }
 // Mark your starters and anyone you refuse to move with "untouchable": true, or

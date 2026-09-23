@@ -21,7 +21,13 @@ const SLOT_POS = { 0: ['QB'], 2: ['RB'], 4: ['WR'], 6: ['TE'], 23: ['RB', 'WR', 
 const starters = {}; let flex = 0;
 for (const [slot, n] of Object.entries(slotCounts)) { const ps = SLOT_POS[slot]; if (!ps || !n) continue; if (ps.length === 1) starters[ps[0]] = (starters[ps[0]] || 0) + n; else flex += n; }
 const pool = (await get(base + '?view=kona_player_info', { 'X-Fantasy-Filter': JSON.stringify({ players: { limit: 400, sortDraftRanks: { sortPriority: 100, sortAsc: true, value: 'PPR' } } }) })).players;
-const sp = p => { const s = (p.stats || []).find(x => x.statSourceId === 1 && x.scoringPeriodId === 0 && x.seasonId === SEASON); return s ? s.appliedTotal : 0; };
+// statSplitTypeId is pinned too, not just statSourceId: ESPN can carry more than
+// one projection under scoringPeriodId 0 (a preseason total and, once the season
+// starts, a separately updated rest-of-season figure) as different entries in the
+// same stats array. Leaving it unpinned returns whichever one ESPN lists first,
+// which is not stable. 0 is the preseason/full-season total, the right split for
+// a pre-draft board (see tools/espn-cookie-fetch.mjs, which pins the same way).
+const sp = p => { const s = (p.stats || []).find(x => x.statSourceId === 1 && x.statSplitTypeId === 0 && x.scoringPeriodId === 0 && x.seasonId === SEASON); return s ? s.appliedTotal : 0; };
 const players = pool.map(x => x.player).map(p => ({ id: p.id, name: p.fullName, pos: POS[p.defaultPositionId] || '?', team: p.proTeamId, proj: +sp(p).toFixed(1), adp: p.ownership && p.ownership.averageDraftPosition ? +p.ownership.averageDraftPosition.toFixed(1) : 999, injury: p.injuryStatus, onTeam: !!(pool.find(y => y.player.id === p.id).onTeamId) })).filter(p => p.pos !== '?');
 
 // Replacement level per position: the projection of the last player who would start

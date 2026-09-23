@@ -1,0 +1,141 @@
+{
+  "_note": "Every number in this repo that came from a measurement rather than from a rule of the game. Each entry says where the literal lives, which harness re-derives it, and how far it may drift before somebody should look. tools/constants-audit.mjs enforces it; tools/guard.mjs runs the audit. Adding measured math WITHOUT adding it here is the thing this file exists to stop: a constant nobody re-derives is a fossil, and fossils have cost this project more than bugs have.",
+  "_wired_key": {
+    "yes": "the consumer reads league/measured.json; the literal is only a fallback",
+    "no": "the consumer carries a bare literal; re-running the harness changes nothing until a human retypes it",
+    "n/a": "not a statistical estimate; it is a policy choice or a rule of the game"
+  },
+  "constants": [
+    {
+      "key": "sim.cv",
+      "file": "lib/sim.mjs",
+      "literal": 0.65,
+      "harness": null,
+      "tolerance": 0.1,
+      "wired": "yes",
+      "what": "Pooled median coefficient of variation, used to scale the correlation betas. Distinct from the per-position table below, which sets the spread of a simulated week.",
+      "source": "nflverse weekly scoring, 2021-2025, median over players with a real role",
+      "pending": "this kit does not ship a correlation-fitting harness, so nothing re-derives it yet. The literal is a population-level default, not an estimate specific to any one league."
+    },
+    {
+      "key": "sim.cv.QB",
+      "file": "lib/sim.mjs",
+      "literal": 0.49,
+      "harness": null,
+      "tolerance": 0.1,
+      "wired": "yes",
+      "what": "Coefficient of variation for QB, setting the spread of a simulated week. Getting this wrong moves every win probability at once, which makes it the most consequential number in the simulator. tools/check-sim.mjs tests lib/sim.mjs's output against this same figure.",
+      "source": "nflverse weekly scoring, 2021-2025, players with a real role",
+      "pending": "this kit does not ship a correlation-fitting harness, so nothing re-derives it yet. The literal is a population-level default, not an estimate specific to any one league."
+    },
+    {
+      "key": "sim.cv.RB",
+      "file": "lib/sim.mjs",
+      "literal": 0.72,
+      "harness": null,
+      "tolerance": 0.1,
+      "wired": "yes",
+      "what": "Coefficient of variation for RB, setting the spread of a simulated week. Getting this wrong moves every win probability at once, which makes it the most consequential number in the simulator. tools/check-sim.mjs tests lib/sim.mjs's output against this same figure.",
+      "source": "nflverse weekly scoring, 2021-2025, players with a real role",
+      "pending": "this kit does not ship a correlation-fitting harness, so nothing re-derives it yet. The literal is a population-level default, not an estimate specific to any one league."
+    },
+    {
+      "key": "sim.cv.WR",
+      "file": "lib/sim.mjs",
+      "literal": 0.64,
+      "harness": null,
+      "tolerance": 0.1,
+      "wired": "yes",
+      "what": "Coefficient of variation for WR, setting the spread of a simulated week. Getting this wrong moves every win probability at once, which makes it the most consequential number in the simulator. tools/check-sim.mjs tests lib/sim.mjs's output against this same figure.",
+      "source": "nflverse weekly scoring, 2021-2025, players with a real role",
+      "pending": "this kit does not ship a correlation-fitting harness, so nothing re-derives it yet. The literal is a population-level default, not an estimate specific to any one league."
+    },
+    {
+      "key": "sim.cv.TE",
+      "file": "lib/sim.mjs",
+      "literal": 0.56,
+      "harness": null,
+      "tolerance": 0.1,
+      "wired": "yes",
+      "what": "Coefficient of variation for TE, setting the spread of a simulated week. Getting this wrong moves every win probability at once, which makes it the most consequential number in the simulator. tools/check-sim.mjs tests lib/sim.mjs's output against this same figure.",
+      "source": "nflverse weekly scoring, 2021-2025, players with a real role",
+      "pending": "this kit does not ship a correlation-fitting harness, so nothing re-derives it yet. The literal is a population-level default, not an estimate specific to any one league."
+    },
+    {
+      "key": "byes.tie",
+      "file": "lib/byes.mjs",
+      "literal": 5,
+      "harness": null,
+      "tolerance": null,
+      "wired": "n/a",
+      "what": "Points of season value inside which two bench players are treated as equal, so bye-week cover can break the tie when ranking who to drop. A policy choice about how much value to trade for schedule coverage, not an estimate of anything.",
+      "source": "chosen, not measured"
+    },
+    {
+      "key": "factor.practiceNone",
+      "file": "tools/injury-check.mjs",
+      "literal": -1.26,
+      "harness": null,
+      "tolerance": 0.3,
+      "wired": "yes",
+      "what": "Points per game a player who did not practice loses against his own average, for a player who plays (not for one who sits).",
+      "source": "nflverse weekly injury reports, 2021-2025",
+      "pending": "this kit does not ship the backtest that fits this figure, so nothing re-derives it yet. The literal is a population-level default from nflverse's public injury reports, not an estimate specific to any one league."
+    },
+    {
+      "key": "factor.practiceLimited",
+      "file": "tools/injury-check.mjs",
+      "literal": -0.68,
+      "harness": null,
+      "tolerance": 0.3,
+      "wired": "yes",
+      "what": "Points per game a player who practiced on a limited basis loses against his own average.",
+      "source": "nflverse weekly injury reports, 2021-2025",
+      "pending": "this kit does not ship the backtest that fits this figure, so nothing re-derives it yet. The literal is a population-level default, not an estimate specific to any one league."
+    },
+    {
+      "key": "factor.practiceFull",
+      "file": "tools/injury-check.mjs",
+      "literal": -0.31,
+      "harness": null,
+      "tolerance": 0.3,
+      "wired": "yes",
+      "what": "Points per game a player who practiced fully while carrying an injury designation loses against his own average.",
+      "source": "nflverse weekly injury reports, 2021-2025",
+      "pending": "this kit does not ship the backtest that fits this figure, so nothing re-derives it yet. The literal is a population-level default, not an estimate specific to any one league."
+    },
+    {
+      "key": "factor.questionableNoPractice",
+      "file": "tools/injury-check.mjs",
+      "literal": -1.26,
+      "harness": null,
+      "tolerance": 0.3,
+      "wired": "yes",
+      "what": "Points per game lost for a player listed QUESTIONABLE who also did not practice. Kept separate from the plain no-practice figure so a questionable, unreported man does not silently borrow a different bucket's number.",
+      "source": "nflverse weekly injury reports, 2021-2025",
+      "pending": "this kit does not ship the backtest that fits this figure, so nothing re-derives it yet. The literal is a population-level default, not an estimate specific to any one league."
+    },
+    {
+      "key": "factor.questionableLimited",
+      "file": "tools/injury-check.mjs",
+      "literal": -1.06,
+      "harness": null,
+      "tolerance": 0.3,
+      "wired": "yes",
+      "what": "Points per game lost for a player listed QUESTIONABLE who practiced on a limited basis.",
+      "source": "nflverse weekly injury reports, 2021-2025",
+      "pending": "this kit does not ship the backtest that fits this figure, so nothing re-derives it yet. The literal is a population-level default, not an estimate specific to any one league."
+    },
+    {
+      "key": "factor.questionableFullPractice",
+      "file": "tools/injury-check.mjs",
+      "literal": -1.16,
+      "harness": null,
+      "tolerance": 0.3,
+      "wired": "yes",
+      "what": "Points per game lost for a player listed QUESTIONABLE who practiced fully. Higher magnitude than the non-questionable full-practice figure because the game-status word still carries information the practice report does not fully capture.",
+      "source": "nflverse weekly injury reports, 2021-2025",
+      "pending": "this kit does not ship the backtest that fits this figure, so nothing re-derives it yet. The literal is a population-level default, not an estimate specific to any one league."
+    }
+  ]
+}
