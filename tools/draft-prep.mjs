@@ -28,9 +28,9 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { spawnSync } from "node:child_process";
-import { REPO, playerWeeks, num } from "../lib/data.mjs";
+import { REPO, playerWeeks, num, pointsAt, receptionPoints } from "../lib/data.mjs";
 
+import { mcpCall } from "../lib/mcp.mjs";
 const argv = process.argv.slice(2);
 const arg = (k, d) => { const i = argv.indexOf("--" + k); return i >= 0 ? argv[i + 1] : d; };
 const LEAGUE = arg("league", "");
@@ -41,22 +41,18 @@ if (!LEAGUE) { console.error("usage: node tools/draft-prep.mjs --league <id> --t
 const SEASONS = [2021, 2022, 2023, 2024, 2025];
 const SLOT_ID = { QB: 0, RB: 2, WR: 4, TE: 6, "D/ST": 16, K: 17 };
 
-function mcp(tool, args) {
-  const r = spawnSync(process.execPath, [path.join(REPO, "tools/mcp-call.mjs"), tool, JSON.stringify(args)], {
-    cwd: REPO, encoding: "utf8", maxBuffer: 64 * 1024 * 1024,
-  });
-  let out = r.stdout || "";
-  const n = out.indexOf("-- Response truncated");
-  if (n >= 0) out = out.slice(0, n);
-  const end = Math.max(out.lastIndexOf("]"), out.lastIndexOf("}"));
-  if (end < 0) throw new Error(`${tool}: no JSON`);
-  return JSON.parse(out.slice(0, end + 1));
-}
+// lib/mcp.mjs, not a local copy of the spawn: a single dropped ESPN read used
+// to fail the whole run, and the error it threw carried no exit code, no stderr
+// and none of the bytes that did come back.
+const mcp = (tool, args) => mcpCall(tool,args);
 
 // --- 1. measured scarcity, from five seasons of real results ----------------
 
-/** Season totals per player per season, then the curve of Nth best by position. */
-async function scarcityCurve() {
+/** Season totals per player per season, then the curve of Nth best by position.
+ *  rp is this league's own reception weight (receptionPoints()): nflverse's
+ *  points column is always full PPR, and scoring every league's curve at that
+ *  weight prices a half or non-PPR league's scarcity wrong. */
+async function scarcityCurve(rp) {
   const byPosSeason = {};
   for (const season of SEASONS) {
     const totals = new Map();
@@ -65,7 +61,7 @@ async function scarcityCurve() {
       if (!["QB", "RB", "WR", "TE"].includes(pos)) continue;
       const k = r.player_id;
       const t = totals.get(k) || { pos, pts: 0 };
-      t.pts += num(r.fantasy_points_ppr || r.fantasy_points);
+      t.pts += pointsAt(r, rp);
       totals.set(k, t);
     }
     for (const { pos, pts } of totals.values()) {
@@ -101,12 +97,13 @@ function pool() {
 
 // --- 3. build ---------------------------------------------------------------
 
-const curve = await scarcityCurve();
+// How many of each position the league actually starts, and its reception
+// weight, both read from the league rather than assumed.
+const league = mcp("get_league", { league_id: String(LEAGUE) });
+const curve = await scarcityCurve(receptionPoints(league));
 const players = pool();
 if (players.length < 50) { console.error(`Only ${players.length} players returned; the league id or cookies are probably wrong.`); process.exit(2); }
 
-// How many of each position the league actually starts, read from the league.
-const league = mcp("get_league", { league_id: String(LEAGUE) });
 const c = league.rosterSlotCounts || {};
 const STARTERS = { QB: num(c["0"]), RB: num(c["2"]), WR: num(c["4"]), TE: num(c["6"]), "D/ST": num(c["16"]), K: num(c["17"]) };
 const FLEX = num(c["23"]);

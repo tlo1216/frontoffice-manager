@@ -17,7 +17,11 @@ const trendingAdd = await j(base + '/players/nfl/trending/add?lookback_hours=24&
 let proj = {};
 try {
   const p = await j('https://api.sleeper.com/projections/nfl/' + state.season + '?season_type=regular&position[]=QB&position[]=RB&position[]=WR&position[]=TE&position[]=K&position[]=DEF&order_by=pts_ppr');
-  for (const row of p) proj[row.player_id] = Math.round((row.stats && row.stats.pts_ppr) || 0);
+  // Kept to two decimals, not rounded to a whole point: tools/diff-snapshot.mjs
+  // reads this number back as an input, not just a display value, and rounding
+  // an input throws away real signal (same fix as tools/yahoo-snapshot-fetch.mjs,
+  // which reads the same Sleeper projection shape).
+  for (const row of p) proj[row.player_id] = Math.round(((row.stats && row.stats.pts_ppr) || 0) * 100) / 100;
 } catch (e) { /* projections endpoint is unofficial; leave zeros and say so */ }
 const name = (id) => { const p = players[id]; return p ? ((p.first_name || '') + ' ' + (p.last_name || '')).trim() || id : id; };
 const inj = (id) => (players[id] && players[id].injury_status) || 'ACTIVE';

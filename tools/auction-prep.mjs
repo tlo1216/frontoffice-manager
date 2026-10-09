@@ -32,9 +32,9 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { spawnSync } from "node:child_process";
 import { REPO, num } from "../lib/data.mjs";
 
+import { mcpCall } from "../lib/mcp.mjs";
 const argv = process.argv.slice(2);
 const arg = (k, d) => { const i = argv.indexOf("--" + k); return i >= 0 ? argv[i + 1] : d; };
 const LEAGUE = arg("league", "");
@@ -49,17 +49,10 @@ const SLOT_ID = { QB: 0, RB: 2, WR: 4, TE: 6, "D/ST": 16, K: 17 };
 let STARTERS = { QB: 1, RB: 2, WR: 2, TE: 1, "D/ST": 1, K: 1 };
 let FLEX = 1;
 
-function mcp(tool, args) {
-  const r = spawnSync(process.execPath, [path.join(REPO, "tools/mcp-call.mjs"), tool, JSON.stringify(args)], {
-    cwd: REPO, encoding: "utf8", maxBuffer: 64 * 1024 * 1024,
-  });
-  let out = r.stdout || "";
-  const n = out.indexOf("-- Response truncated");
-  if (n >= 0) out = out.slice(0, n);
-  const end = Math.max(out.lastIndexOf("]"), out.lastIndexOf("}"));
-  if (end < 0) throw new Error(`${tool}: no JSON`);
-  return JSON.parse(out.slice(0, end + 1));
-}
+// lib/mcp.mjs, not a local copy of the spawn: a single dropped ESPN read used
+// to fail the whole run, and the error it threw carried no exit code, no stderr
+// and none of the bytes that did come back.
+const mcp = (tool, args) => mcpCall(tool,args);
 
 // --- current pool -----------------------------------------------------------
 

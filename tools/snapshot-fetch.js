@@ -11,7 +11,21 @@ const M = await j(base + '?view=mTeam');
 const S = await j(base + '?view=mSettings');
 const P = await j(base + '?view=mPendingTransactions');
 const FA = await j(base + '?scoringPeriodId=1&view=kona_player_info', { 'X-Fantasy-Filter': JSON.stringify({ players: { filterStatus: { value: ['FREEAGENT', 'WAIVERS'] }, limit: 60, sortPercOwned: { sortPriority: 1, sortAsc: false } } }) });
-const sp = p => { const s = (p.stats || []).find(x => x.statSourceId === 1 && x.scoringPeriodId === 0 && x.seasonId === SEASON); return s ? Math.round(s.appliedTotal) : 0; };
+// statSplitTypeId is pinned, not just statSourceId: ESPN can carry more than one
+// projection under scoringPeriodId 0 (a preseason total and, once the season is
+// under way, a separately updated rest-of-season figure) as different entries in
+// the same stats array. Leaving it unpinned returns whichever one ESPN lists
+// first, which is not stable. Try the rest-of-season split (2) first, since
+// that is the one worth acting on once it exists, and fall back to the
+// preseason split (0) before it does. Kept to two decimals, not rounded to a
+// whole point: this number is read back later by tools/diff-snapshot.mjs, not
+// just displayed, and rounding an input throws away real signal.
+const sp = p => {
+  const stats = p.stats || [];
+  const find = split => stats.find(x => x.statSourceId === 1 && x.statSplitTypeId === split && x.scoringPeriodId === 0 && x.seasonId === SEASON);
+  const s = find(2) || find(0);
+  return s ? Math.round(s.appliedTotal * 100) / 100 : 0;
+};
 const lines = ['# League snapshot ' + new Date().toLocaleString() + '. Format: teamId|playerId|name|injury|seasonProj ; FA rows add |pctOwned'];
 for (const t of R.teams) for (const e of (t.roster ? t.roster.entries : [])) { const p = e.playerPoolEntry.player; lines.push([t.id, p.id, p.fullName, p.injuryStatus, sp(p)].join('|')); }
 for (const x of (FA.players || [])) { const p = x.player; lines.push(['FA', p.id, p.fullName, p.injuryStatus, sp(p), Math.round(p.ownership ? p.ownership.percentOwned : 0)].join('|')); }

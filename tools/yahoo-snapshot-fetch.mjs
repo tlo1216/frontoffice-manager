@@ -7,6 +7,7 @@
 // Usage: node tools/yahoo-snapshot-fetch.mjs > snapshot.txt
 //        node tools/diff-snapshot.mjs snapshot.txt --apply
 import fs from 'node:fs';
+import { nflSeason } from '../lib/data.mjs';
 const envPath = process.env.FRONTOFFICE_ENV || '.env';
 const env = Object.fromEntries(fs.readFileSync(envPath, 'utf8').split('\n').filter(l => l.includes('=')).map(l => { const i = l.indexOf('='); return [l.slice(0, i).trim(), l.slice(i + 1).trim()]; }));
 const basic = Buffer.from(env.YAHOO_CLIENT_ID + ':' + env.YAHOO_CLIENT_SECRET).toString('base64');
@@ -14,7 +15,12 @@ const tok = await (await fetch('https://api.login.yahoo.com/oauth2/get_token', {
 if (!tok.access_token) { console.error('Yahoo token refresh failed; rerun tools/yahoo-auth.mjs'); process.exit(1); }
 const base = 'https://fantasysports.yahooapis.com/fantasy/v2';
 const j = async (path) => { const r = await fetch(base + path + (path.includes('?') ? '&' : '?') + 'format=json', { headers: { Authorization: 'Bearer ' + tok.access_token } }); if (r.status !== 200) throw new Error('yahoo ' + r.status + ' on ' + path); return r.json(); };
-const LK = env.YAHOO_LEAGUE_KEY, SPORT = env.YAHOO_SPORT || 'nfl', SEASON = env.YAHOO_SEASON || new Date().getFullYear();
+const LK = env.YAHOO_LEAGUE_KEY, SPORT = env.YAHOO_SPORT || 'nfl';
+// The calendar year is the wrong default for football in January: the season
+// named 2026 is still running (weeks 17-18) when the calendar has already
+// turned to 2027. NBA and MLB season numbering does not share that rule, so
+// only football gets the NFL-season default; the others keep the plain year.
+const SEASON = env.YAHOO_SEASON || (SPORT === 'nfl' ? nflSeason() : new Date().getFullYear());
 
 // Yahoo's JSON is a nested array soup; these helpers flatten the common shapes.
 const objs = (container) => Object.keys(container || {}).filter(k => k !== 'count').map(k => container[k]);

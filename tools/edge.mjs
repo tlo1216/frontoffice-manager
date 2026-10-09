@@ -29,10 +29,11 @@
 // evidence. The report says so and ranks by usage rather than by points on
 // purpose, because usage stabilises many weeks before scoring does.
 
-import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
+import { mcpCall } from "../lib/mcp.mjs";
+import { pointsAt, receptionPoints } from "../lib/data.mjs";
 const REPO = path.resolve(import.meta.dirname, "..");
 const CACHE = path.join(REPO, "tools", ".cache");
 const argv = process.argv.slice(2);
@@ -80,17 +81,10 @@ function parseCsv(text) {
   return rows.filter((r) => r.length > 1).map((r) => Object.fromEntries(head.map((h, i) => [h, r[i]])));
 }
 
-function mcp(tool, args) {
-  const r = spawnSync(process.execPath, [path.join(REPO, "tools/mcp-call.mjs"), tool, JSON.stringify(args)], {
-    cwd: REPO, encoding: "utf8", maxBuffer: 64 * 1024 * 1024,
-  });
-  let out = r.stdout || "";
-  const note = out.indexOf("-- Response truncated");
-  if (note >= 0) out = out.slice(0, note);
-  const end = Math.max(out.lastIndexOf("]"), out.lastIndexOf("}"));
-  if (end < 0) throw new Error(`${tool}: no JSON. ${out.slice(0, 160)}`);
-  return JSON.parse(out.slice(0, end + 1));
-}
+// lib/mcp.mjs, not a local copy of the spawn: a single dropped ESPN read used
+// to fail the whole run, and the error it threw carried no exit code, no stderr
+// and none of the bytes that did come back.
+const mcp = (tool, args) => mcpCall(tool,args);
 
 const num = (v) => { const n = Number(v); return Number.isFinite(n) ? n : 0; };
 const fx = (n, d = 2) => (Number.isFinite(n) ? n.toFixed(d) : "—");
@@ -119,9 +113,17 @@ for (const r of rosterWeekly) if (r.gsis_id && r.espn_id) espnOf.set(r.gsis_id, 
 const snapPct = new Map();
 for (const s of snaps) if (num(s.week) === week) snapPct.set(`${s.player}|${s.team}`, num(s.offense_pct));
 
+// Team count and reception weight, read from the league rather than assumed:
+// a fixed 8 teams silently stopped checking ownership past team 8 in a bigger
+// league, and full PPR silently priced a half (or non) PPR league wrong.
+const league = mcp("get_league", {});
+const TEAM_COUNT = num(league.teamCount);
+if (!TEAM_COUNT) { console.error("get_league answered with no teamCount; cannot enumerate rosters."); process.exit(2); }
+const RP = receptionPoints(league);
+
 // who is rostered anywhere in the league, and by whom
 const owner = new Map();
-for (let t = 1; t <= 8; t++) {
+for (let t = 1; t <= TEAM_COUNT; t++) {
   let rs; try { rs = mcp("get_rosters", { team_id: t }); } catch { continue; }
   for (const p of (rs[0] || rs).players || []) owner.set(String(p.id), t);
 }
@@ -137,7 +139,7 @@ const players = weekStats.map((s) => {
     team: s.team,
     espnId,
     ownedBy: espnId ? owner.get(String(espnId)) : undefined,
-    pts: num(s.fantasy_points_ppr ?? s.fantasy_points),
+    pts: pointsAt(s, RP),
     targets: num(s.targets),
     carries: num(s.carries),
     touches,

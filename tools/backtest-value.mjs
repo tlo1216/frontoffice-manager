@@ -19,9 +19,9 @@
 //    week for nothing.
 
 import fs from "node:fs";
-import { spawnSync } from "node:child_process";
 import path from "node:path";
 
+import { mcpCall } from "../lib/mcp.mjs";
 const REPO = path.resolve(import.meta.dirname, "..");
 const args = process.argv.slice(2);
 const week = Number(args[args.indexOf("--week") + 1]) || 1;
@@ -33,17 +33,10 @@ const MY_TEAM = Number(process.env.ESPN_TEAM_ID ||
     : 0) || 0);
 if (!MY_TEAM) { console.error('Set ESPN_TEAM_ID in .env so this knows which team is yours.'); process.exit(2); }
 
-function mcp(tool, argsObj) {
-  const r = spawnSync(process.execPath, [path.join(REPO, "tools/mcp-call.mjs"), tool, JSON.stringify(argsObj)], {
-    cwd: REPO, encoding: "utf8", maxBuffer: 64 * 1024 * 1024,
-  });
-  let out = r.stdout || "";
-  const note = out.indexOf("-- Response truncated");
-  if (note >= 0) out = out.slice(0, note);
-  const end = Math.max(out.lastIndexOf("]"), out.lastIndexOf("}"));
-  if (end < 0) throw new Error(`${tool}: no JSON. ${out.slice(0, 160)}`);
-  return JSON.parse(out.slice(0, end + 1));
-}
+// lib/mcp.mjs, not a local copy of the spawn: a single dropped ESPN read used
+// to fail the whole run, and the error it threw carried no exit code, no stderr
+// and none of the bytes that did come back.
+const mcp = (tool, argsObj) => mcpCall(tool,argsObj);
 
 const teams = mcp("get_teams", {});
 const nameOf = new Map(teams.map((t) => [t.teamId ?? t.id, t.teamName || t.name]));

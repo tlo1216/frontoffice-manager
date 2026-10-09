@@ -35,12 +35,12 @@
 // legitimately empty and says so rather than guessing.
 
 import process from "node:process";
-import { games, injuries, idMap, num } from "../lib/data.mjs";
+import { games, injuries, idMap, num, nflSeason } from "../lib/data.mjs";
 import { getJSON } from "../lib/net.mjs";
 
 const argv = process.argv.slice(2);
 const arg = (k, d) => { const i = argv.indexOf("--" + k); return i >= 0 ? argv[i + 1] : d; };
-const SEASON = Number(arg("season", new Date().getFullYear()));
+const SEASON = Number(arg("season", nflSeason()));
 const LEAGUE = arg("league", process.env.ESPN_LEAGUE_ID || "");
 const TEAM = Number(arg("team", process.env.ESPN_TEAM_ID || 0));
 const WEEK_ARG = Number(arg("week", 0));
@@ -100,9 +100,14 @@ try {
   }
 } catch { /* early in a season the file may not exist yet */ }
 
+// statSplitTypeId 1 is a WEEK split. ESPN can carry more than one entry for the
+// same statSourceId and scoringPeriodId; leaving the split unpinned returns
+// whichever one it lists first, which is not stable across players or calls.
+const SPLIT_WEEK = 1;
+
 const roster = (team.roster?.entries || []).map((e) => {
   const p = e.playerPoolEntry.player;
-  const proj = (p.stats || []).find((s) => s.statSourceId === 1 && s.scoringPeriodId === week && Number(s.seasonId) === SEASON)?.appliedTotal ?? 0;
+  const proj = (p.stats || []).find((s) => s.statSourceId === 1 && s.statSplitTypeId === SPLIT_WEEK && s.scoringPeriodId === week && Number(s.seasonId) === SEASON)?.appliedTotal ?? 0;
   return { id: p.id, name: p.fullName, pos: POS[p.defaultPositionId] || "?", team: PRO[p.proTeamId],
     slot: SLOT[e.lineupSlotId] ?? String(e.lineupSlotId), slotId: e.lineupSlotId,
     status: p.injuryStatus && p.injuryStatus !== "ACTIVE" ? p.injuryStatus : null, proj };
@@ -139,7 +144,7 @@ try {
   }).then((r) => r.json());
   const pool = (fa.players || []).map((e) => e.player).filter(Boolean).map((p) => ({
     name: p.fullName, pos: POS[p.defaultPositionId] || "?",
-    proj: (p.stats || []).find((x) => x.statSourceId === 1 && x.scoringPeriodId === week && Number(x.seasonId) === SEASON)?.appliedTotal ?? 0,
+    proj: (p.stats || []).find((x) => x.statSourceId === 1 && x.statSplitTypeId === SPLIT_WEEK && x.scoringPeriodId === week && Number(x.seasonId) === SEASON)?.appliedTotal ?? 0,
     out: /OUT|INJURY_RESERVE/.test(p.injuryStatus || ""),
   })).filter((p) => !p.out);
   for (const st of starters) {

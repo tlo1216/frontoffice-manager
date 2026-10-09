@@ -21,10 +21,10 @@
 // 3. THE COST OF EACH INDIVIDUAL SIT. The single worst bench decision, named,
 //    so the retune has something concrete to argue with.
 
-import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
+import { mcpCall } from "../lib/mcp.mjs";
 const REPO = path.resolve(import.meta.dirname, "..");
 const args = process.argv.slice(2);
 const week = Number(args[args.indexOf("--week") + 1]) || 1;
@@ -51,21 +51,10 @@ const SLOTS = [
   { name: "FLEX", n: 2, pos: ["RB", "WR", "TE"] },
 ];
 
-function mcp(tool, argsObj) {
-  const r = spawnSync(process.execPath, [path.join(REPO, "tools/mcp-call.mjs"), tool, JSON.stringify(argsObj)], {
-    cwd: REPO,
-    encoding: "utf8",
-    maxBuffer: 64 * 1024 * 1024,
-  });
-  let out = r.stdout || "";
-  // The server appends a note when it trims a long list. Cut it before parsing;
-  // it is prose, not JSON.
-  const note = out.indexOf("-- Response truncated");
-  if (note >= 0) out = out.slice(0, note);
-  const end = Math.max(out.lastIndexOf("]"), out.lastIndexOf("}"));
-  if (end < 0) throw new Error(`${tool}: no JSON in response. ${out.slice(0, 200)}`);
-  return JSON.parse(out.slice(0, end + 1));
-}
+// lib/mcp.mjs, not a local copy of the spawn: a single dropped ESPN read used
+// to fail the whole run, and the error it threw carried no exit code, no stderr
+// and none of the bytes that did come back.
+const mcp = (tool, argsObj) => mcpCall(tool,argsObj);
 
 /** Best score this roster could have put up, knowing the results. */
 function bestPossible(players) {
