@@ -1,0 +1,12 @@
+{
+  "_note": "Copy to league/expected-schedule.json and list the recurring passes you actually run, as five field crons (numbers, lists and ranges) in the timezone below. A CI workflow's cron is UTC: say \"UTC\" here. lineupPass false means the task is checked for having run (tools/reconcile.mjs) but never counted as covering a kickoff (tools/lock-coverage.mjs). Each pass should log itself: lineup passes by running tools/kickoff-guard.mjs --task <taskId>, anything else with tools/reconcile.mjs --mark <taskId>.",
+  "timezone": "America/New_York",
+  "tasks": [
+    { "taskId": "thursday-night-lineup", "cron": "30 19 * * 4", "lineupPass": true },
+    { "taskId": "sunday-early-lineup", "cron": "10 12 * * 0", "lineupPass": true },
+    { "taskId": "sunday-late-lineup", "cron": "30 15 * * 0", "lineupPass": true },
+    { "taskId": "sunday-night-lineup", "cron": "30 19 * * 0", "lineupPass": true },
+    { "taskId": "monday-night-lineup", "cron": "30 19 * * 1", "lineupPass": true },
+    { "taskId": "tuesday-weekly-report", "cron": "0 9 * * 2", "lineupPass": false }
+  ]
+}
