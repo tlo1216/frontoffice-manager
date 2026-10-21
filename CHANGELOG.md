@@ -35,6 +35,29 @@ announced.
 
 ### Added
 
+- **Checks that the passes protecting your lineup actually run before lock.**
+  `tools/kickoff-guard.mjs` is the first thing a pre-lock pass runs: it says
+  ON TIME, EARLY or LATE against the real kickoff, names any of your starters
+  already locked while tagged out, and with `--window` picks which of a pair
+  of UTC cron runs should act, so the November clock change cannot push a
+  pass ahead of the inactive list. `tools/lock-coverage.mjs` walks the NFL
+  schedule against the passes in `league/expected-schedule.json` and fails on
+  any upcoming slot holding your starters with no pass between the inactives
+  and the lock. `tools/reconcile.mjs` is the fast, frequent check across all
+  of it: every scheduled task has a logged run since it was last due, lock
+  coverage, constants, the rules mirror, and no claim or trade stuck past
+  ESPN's own deadline. `lib/kickoffs.mjs` holds the shared kickoff, cron and
+  pass log code. Start from `league/expected-schedule.example.json`.
+- **Hockey plumbing, verified against live endpoints.** `lib/nhl-stats.mjs`
+  reads the NHL's free stats and schedule APIs with proof-of-life row bands,
+  and cross-checks ESPN's hockey schedule against the NHL's own, team by team
+  and week by week; `tools/nhl-stats-test.mjs` runs all of it live.
+  `lib/nhl-config.mjs` is the one place a hockey tool gets its league and
+  season (ESPN names a hockey season for the year it ends, and a guessed year
+  404s like a dead cookie). `tools/nhl-league-verify.mjs` compares
+  `league/hockey-league.json` field by field with the live league, and
+  `tools/nhl-scoring-verify.mjs` proves its scoring map reproduces ESPN's own
+  totals on hundreds of players. Start from `league/hockey-league.example.json`.
 - **A measured-numbers registry, so a backtested figure cannot quietly go
   stale.** `lib/measured.mjs` lets a harness record what it measured, with a
   sample size and a source, and lets a consumer read that measurement with a

@@ -1,0 +1,21 @@
+{
+  "_note": "Copy to league/hockey-league.json. id and teamId may stay blank when .env sets ESPN_SPORT=fhl with ESPN_LEAGUE_ID and ESPN_TEAM_ID. season is the year the NHL season ENDS (2027 for 2026-27). Every other value here is a placeholder: run node tools/nhl-league-verify.mjs, which prints ESPN's live value for every field that does not match, and copy those in. Then node tools/nhl-scoring-verify.mjs proves scoring.byStatId against ESPN's own totals. For a roto or categories league, replace byStatId with categories: { skater: [{ statId, direction }], goalie: [...] }, direction 1 for more is better and -1 for less is better.",
+  "id": "",
+  "teamId": 0,
+  "season": 2027,
+  "name": "",
+  "teams": 10,
+  "verifiedAgainstLiveLeague": "",
+  "starters": { "C": 2, "LW": 2, "RW": 2, "D": 4, "G": 2, "UTIL": 1 },
+  "bench": 4,
+  "ir": 1,
+  "positionLimits": {},
+  "scoring": {
+    "type": "H2H_POINTS",
+    "byStatId": {}
+  },
+  "schedule": { "matchupPeriodCount": 0, "playoffTeamCount": 0 },
+  "acquisitions": { "perMatchupPeriod": "none" },
+  "notDraftedYet": true,
+  "draft": { "type": "SNAKE", "date": "", "scheduled": false, "timePerSelection": 90 }
+}
