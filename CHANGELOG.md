@@ -7,6 +7,15 @@ announced.
 
 ### Fixed
 
+- **Rest-of-season projections were read from the full-season split.**
+  `lib/data.mjs` `forwardProjection()` took ESPN's season split 2 as the rest
+  of season. Measured mid-season it is a full-season total; split 0 is what a
+  player has left (its games-played stat reads the games remaining, split 2
+  reads 16 or 17). Every per-week figure divided from it, including the bye
+  week weakness in `lib/byes.mjs`, was overstated, and an injured player kept
+  most of his healthy full-season value. Now reads split 0, still tells a
+  preseason total from a rest-of-season one, and `tools/projection-split-test.mjs`
+  pins it.
 - **The matchup simulator was understating variance by roughly three to one.**
   `lib/sim.mjs` recentred a resampled week on a player's own projection
   without rescaling it to his position's real spread, so a receiver projected

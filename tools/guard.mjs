@@ -93,6 +93,8 @@ if (!ledger.thresholds && GUARDED.length) {
 const SMOKE = [
   // { tool: "trade-finder.mjs", args: [], mustMatch: /Replacement level/,
   //   minLines: 20, why: "replacement levels computed" },
+  { tool: "projection-split-test.mjs", args: [], mustMatch: /projection-split-test: ok/,
+    why: "rest-of-season split read correctly" },
 ];
 
 for (const s of SMOKE) {
